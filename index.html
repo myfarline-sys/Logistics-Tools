@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan Kontena V4.1 — Solmax Senawang</title>
+<title>Kalkulator Muatan Kontena V4.2 — Solmax Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
  :root {
@@ -97,6 +97,12 @@
  color: #cbd5e1;
  gap: 6px;
  }
+ .sync-status-wrap {
+ display: flex;
+ flex-direction: column;
+ min-width: 0;
+ flex: 1;
+ }
  .sync-status {
  display: flex;
  align-items: center;
@@ -105,12 +111,22 @@
  text-overflow: ellipsis;
  white-space: nowrap;
  }
+ .sync-subtime {
+ font-size: 9.8px;
+ color: #94a3b8;
+ margin-left: 12px;
+ margin-top: 1px;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
  .sync-dot {
  width: 7px; height: 7px; border-radius: 50%;
  background: #fbbf24;
  flex-shrink: 0;
  }
  .sync-dot.live { background: #34d399; }
+ .sync-dot.err { background: #f87171; }
  .sync-btns {
  display: flex;
  gap: 5px;
@@ -135,6 +151,38 @@
  color: #a7f3d0;
  }
  .mini-btn:active { background: rgba(255,255,255,0.28); }
+
+ /* Sync Error Banner */
+ .sync-err-banner {
+ display: none;
+ margin-top: 8px;
+ background: rgba(239, 68, 68, 0.2);
+ border: 1px solid rgba(248, 113, 113, 0.6);
+ border-radius: 8px;
+ padding: 7px 9px;
+ font-size: 11px;
+ color: #fecaca;
+ line-height: 1.35;
+ }
+ .sync-err-banner.show { display: block; }
+ .sync-err-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ font-weight: 800;
+ color: #fca5a5;
+ margin-bottom: 2px;
+ }
+ .sync-err-close {
+ background: none;
+ border: none;
+ color: #fecaca;
+ font-size: 14px;
+ font-weight: 800;
+ cursor: pointer;
+ padding: 0 4px;
+ line-height: 1;
+ }
 
  /* Page Sections */
  .tab-view { display: none; padding: 12px 12px 16px; }
@@ -840,23 +888,33 @@
 
 <div class="top-header">
  <div class="header-row1">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V4.1</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V4.2</span></h1>
  <span class="count-pill" id="headerCountPill">100+ REKOD</span>
  </div>
  <div class="header-sub">Solmax Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  <div class="sync-strip">
+ <div class="sync-status-wrap">
  <div class="sync-status">
  <span class="sync-dot" id="syncDot"></span>
  <span id="syncText">Pangkalan Data: Loading Capacity V2.0</span>
  </div>
+ <div class="sync-subtime" id="lastSyncTimeText">Sync terakhir: Belum pernah</div>
+ </div>
  <div class="sync-btns">
  <button class="mini-btn accent" onclick="openCustomModal()">+ Rekod</button>
  <button class="mini-btn" onclick="openBackupModal()">&#x1F4BE; JSON</button>
- <button class="mini-btn" onclick="syncGoogleSheets(true)">&#x21bb; Sync</button>
+ <button class="mini-btn" id="btnSyncNow" onclick="syncGoogleSheets(true)">&#x21bb; Sync</button>
  <label class="mini-btn">&#x1F4C2; Excel
  <input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleManualExcel(event)">
  </label>
  </div>
+ </div>
+ <div class="sync-err-banner" id="syncErrorBanner">
+ <div class="sync-err-head">
+ <span>&#x26A0; Ralat Sync Google Sheets</span>
+ <button type="button" class="sync-err-close" onclick="hideSyncError()" title="Tutup">&times;</button>
+ </div>
+ <div id="syncErrorDetail"></div>
  </div>
 </div>
 
@@ -1296,6 +1354,7 @@ const SPREADSHEET_ID = '1AefWdd565fNULwWjUx-4AUIueYyyhphrQ5lrAG7XTBA';
 const CACHE_KEY = 'solmax_v4_all_records';
 const FAB_INT_KEY = 'solmax_v4_fab_internal';
 const CUSTOM_KEY = 'solmax_v4_custom_records';
+const LAST_SYNC_KEY = 'solmax_v4_last_sync_ts';
 
 const SHEETS_LIST = [
  'Fab (Internal)',
@@ -1350,6 +1409,7 @@ let activePlanCont = '40';
 let activeCatSheet = 'ALL';
 let gabunganList = [{ idx: 0, qty: 20 }, { idx: 1, qty: 15 }];
 let campuranList = [{ idx: 0, qty: 20 }, { idx: 1, qty: 10 }];
+let isSyncing = false;
 
 function getAllCatalogRecords() {
  return [...customRecords, ...baseCatalogRecords];
@@ -1364,6 +1424,44 @@ function num(v) {
 
 function str(v) {
  return (v === null || v === undefined) ? '' : String(v).trim();
+}
+
+function formatSyncTimestamp(isoOrDate) {
+ if (!isoOrDate) return 'Belum pernah';
+ const d = new Date(isoOrDate);
+ if (isNaN(d.getTime())) return String(isoOrDate);
+ const day = String(d.getDate()).padStart(2, '0');
+ const mon = String(d.getMonth() + 1).padStart(2, '0');
+ const yr = d.getFullYear();
+ let hr = d.getHours();
+ const min = String(d.getMinutes()).padStart(2, '0');
+ const sec = String(d.getSeconds()).padStart(2, '0');
+ const ampm = hr >= 12 ? 'PM' : 'AM';
+ hr = hr % 12 || 12;
+ return `${day}/${mon}/${yr}, ${hr}:${min}:${sec} ${ampm}`;
+}
+
+function updateLastSyncDisplay(tsIso) {
+ const el = document.getElementById('lastSyncTimeText');
+ if (!el) return;
+ if (tsIso) {
+ el.textContent = `Sync terakhir: ${formatSyncTimestamp(tsIso)}`;
+ } else {
+ const saved = localStorage.getItem(LAST_SYNC_KEY);
+ el.textContent = saved ? `Sync terakhir: ${formatSyncTimestamp(saved)}` : 'Sync terakhir: Belum pernah (Data Cache/Asal)';
+ }
+}
+
+function showSyncError(messageHtml) {
+ const banner = document.getElementById('syncErrorBanner');
+ const detail = document.getElementById('syncErrorDetail');
+ if (detail) detail.innerHTML = messageHtml;
+ if (banner) banner.classList.add('show');
+}
+
+function hideSyncError() {
+ const banner = document.getElementById('syncErrorBanner');
+ if (banner) banner.classList.remove('show');
 }
 
 function parseSizePair(s) {
@@ -1385,7 +1483,6 @@ function findDateColIndex(rows, maxScan = 10) {
 function parseRecordDateScore(dStr) {
  if (!dStr || dStr === '-') return 0;
  const s = String(dStr).trim();
- // DD/MM/YYYY or D/M/YYYY
  let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
  if (m) {
  const d = parseInt(m[1], 10);
@@ -1395,13 +1492,11 @@ function parseRecordDateScore(dStr) {
  const ts = new Date(yr, mo, d).getTime();
  return isNaN(ts) ? 0 : ts;
  }
- // YYYY-MM-DD
  m = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
  if (m) {
  const ts = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)).getTime();
  return isNaN(ts) ? 0 : ts;
  }
- // D-MMM (e.g., 4-Aug, 27-Aug)
  const months = { jan:0, feb:1, mar:2, apr:3, may:4, mei:4, jun:5, jul:6, aug:7, ogo:7, sep:8, oct:9, okt:9, nov:10, dec:11, dis:11 };
  m = s.match(/^(\d{1,2})[\s\-]([a-zA-Z]{3,})/);
  if (m) {
@@ -1643,9 +1738,16 @@ function parseUpcomingSheet(rows) {
 
 function fetchJsonpSheet(sheetName) {
  return new Promise((resolve, reject) => {
+ if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+ reject(new Error('Tiada sambungan internet (Offline)'));
+ return;
+ }
  const cb = 'cb_' + Math.random().toString(36).slice(2, 10);
  const sc = document.createElement('script');
- const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 9000);
+ const timer = setTimeout(() => {
+ cleanup();
+ reject(new Error(`Timeout (>9s) semasa membaca tab "${sheetName}"`));
+ }, 9000);
  function cleanup() {
  clearTimeout(timer);
  delete window[cb];
@@ -1653,25 +1755,45 @@ function fetchJsonpSheet(sheetName) {
  }
  window[cb] = (resp) => {
  cleanup();
- if (resp && resp.status === 'ok') resolve(gvizToMatrix(resp));
- else reject(new Error('denied'));
+ if (resp && resp.status === 'ok') {
+ resolve(gvizToMatrix(resp));
+ } else {
+ const apiErr = (resp && resp.errors && resp.errors.length)
+ ? resp.errors.map(e => e.detailed_message || e.message || e.reason).join('; ')
+ : 'Akses ditolak / Google Sheets tidak dikongsi secara umum';
+ reject(new Error(apiErr));
+ }
  };
- sc.onerror = () => { cleanup(); reject(new Error('network')); };
- sc.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:${cb}&sheet=${encodeURIComponent(sheetName)}`;
+ sc.onerror = () => {
+ cleanup();
+ reject(new Error('Gagal sambung ke pelayan Google (Rangkaian disekat / offline)'));
+ };
+ sc.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:${cb}&sheet=${encodeURIComponent(sheetName)}&_t=${Date.now()}`;
  document.body.appendChild(sc);
  });
 }
 
 async function syncGoogleSheets(notify = false) {
+ if (isSyncing) return;
+ isSyncing = true;
+ const syncBtn = document.getElementById('btnSyncNow');
+ if (syncBtn) syncBtn.disabled = true;
+
+ const dotEl = document.getElementById('syncDot');
+ dotEl.classList.remove('live', 'err');
  document.getElementById('syncText').textContent = 'Menyegerak Google Sheets...';
+
+ try {
  const resList = await Promise.allSettled(
  SHEETS_LIST.map(s => fetchJsonpSheet(s).then(rows => ({ s, rows })))
  );
  let newCatalog = [];
  let newFabInt = [];
  let okCount = 0;
+ let failedReasons = [];
 
- resList.forEach(item => {
+ resList.forEach((item, idx) => {
+ const sheetName = SHEETS_LIST[idx];
  if (item.status === 'fulfilled') {
  okCount++;
  const { s, rows } = item.value;
@@ -1683,21 +1805,56 @@ async function syncGoogleSheets(notify = false) {
  else if (s === 'NW (Internal)' || s === 'Woven (Internal)') newCatalog = newCatalog.concat(parseNwWovenSheet(rows));
  else if (s === 'GCL (Internal)') newCatalog = newCatalog.concat(parseGclSheet(rows));
  else if (s === 'Upcoming') newCatalog = newCatalog.concat(parseUpcomingSheet(rows));
+ } else {
+ const reason = item.reason ? (item.reason.message || String(item.reason)) : 'Ralat tidak diketahui';
+ failedReasons.push(`${sheetName}: ${reason}`);
  }
  });
 
  if (okCount > 0 && newCatalog.length > 0) {
  baseCatalogRecords = newCatalog;
  if (newFabInt.length > 0) fabInternalRecords = newFabInt;
+ const nowIso = new Date().toISOString();
  localStorage.setItem(CACHE_KEY, JSON.stringify(baseCatalogRecords));
  localStorage.setItem(FAB_INT_KEY, JSON.stringify(fabInternalRecords));
- document.getElementById('syncDot').classList.add('live');
+ localStorage.setItem(LAST_SYNC_KEY, nowIso);
+
+ dotEl.classList.remove('err');
+ dotEl.classList.add('live');
  document.getElementById('syncText').textContent = `Live Sync (${getAllCatalogRecords().length} rekod)`;
+ updateLastSyncDisplay(nowIso);
+
+ if (failedReasons.length > 0) {
+ const uniqueErrs = [...new Set(failedReasons.map(r => r.split(': ')[1]))].join(' | ');
+ showSyncError(`Sebahagian tab (${failedReasons.length}/${SHEETS_LIST.length}) gagal dimuatkan: <strong>${esc(uniqueErrs)}</strong>`);
+ } else {
+ hideSyncError();
+ }
+
  refreshAllViews();
- if (notify) showToast(`Berjaya sync ${baseCatalogRecords.length} rekod terkini!`);
+ if (notify) showToast(`Berjaya sync ${baseCatalogRecords.length} rekod (${okCount}/${SHEETS_LIST.length} tab)!`);
  } else {
  loadInitialData();
- if (notify) showToast('Tetapkan Share Google Sheets ke "Anyone with the link"');
+ dotEl.classList.remove('live');
+ dotEl.classList.add('err');
+ const sampleReason = failedReasons.length > 0
+ ? [...new Set(failedReasons.map(r => r.split(': ')[1]))].slice(0, 2).join(' | ')
+ : 'Tiada rekod sah diterima daripada Google Sheets (0 rekod).';
+ document.getElementById('syncText').textContent = `Sync Gagal (Guna Cache: ${getAllCatalogRecords().length} rekod)`;
+ showSyncError(`<strong>Punca:</strong> ${esc(sampleReason)}<br><span style="opacity:0.9;">Pastikan internet aktif &amp; tetapan Share Google Sheets adalah <em>Anyone with the link (Viewer)</em>.</span>`);
+ if (notify) showToast(`Sync gagal: ${sampleReason}`);
+ }
+ } catch (unexpectedErr) {
+ loadInitialData();
+ dotEl.classList.remove('live');
+ dotEl.classList.add('err');
+ const msg = unexpectedErr && unexpectedErr.message ? unexpectedErr.message : String(unexpectedErr);
+ document.getElementById('syncText').textContent = `Sync Gagal (${getAllCatalogRecords().length} rekod)`;
+ showSyncError(`<strong>Ralat Sistem:</strong> ${esc(msg)}`);
+ if (notify) showToast(`Sync gagal: ${msg}`);
+ } finally {
+ isSyncing = false;
+ if (syncBtn) syncBtn.disabled = false;
  }
 }
 
@@ -1722,10 +1879,16 @@ function handleManualExcel(ev) {
  if (newCat.length > 0) {
  baseCatalogRecords = newCat;
  if (newFab.length > 0) fabInternalRecords = newFab;
+ const nowIso = new Date().toISOString();
  localStorage.setItem(CACHE_KEY, JSON.stringify(baseCatalogRecords));
  localStorage.setItem(FAB_INT_KEY, JSON.stringify(fabInternalRecords));
- document.getElementById('syncDot').classList.add('live');
+ localStorage.setItem(LAST_SYNC_KEY, nowIso);
+ const dotEl = document.getElementById('syncDot');
+ dotEl.classList.remove('err');
+ dotEl.classList.add('live');
  document.getElementById('syncText').textContent = `Excel (${getAllCatalogRecords().length} rekod)`;
+ updateLastSyncDisplay(nowIso);
+ hideSyncError();
  refreshAllViews();
  showToast(`Dimuat naik: ${baseCatalogRecords.length} rekod!`);
  }
@@ -1746,6 +1909,7 @@ function loadInitialData() {
  fabInternalRecords = SEED_FAB_INTERNAL;
  customRecords = [];
  }
+ updateLastSyncDisplay();
  refreshAllViews();
 }
 
@@ -1788,11 +1952,10 @@ function calcRollSpec() {
  const thick = parseFloat(document.getElementById('rcThick').value) || 0;
  const coreCm = parseFloat(document.getElementById('rcCore').value) || 10;
 
- // D_outer (cm) = sqrt(D_core^2 + (40 * L_m * t_mm) / pi)
  const dCm = Math.sqrt(Math.pow(coreCm, 2) + (40 * l * thick) / Math.PI);
  const dM = dCm / 100;
  const netKg = (w * l * gsm) / 1000;
- const estCoreKg = w * 2.0; // ~2kg per meter core & wrapping
+ const estCoreKg = w * 2.0;
  const gwKg = Math.round(netKg + estCoreKg);
 
  lastRollCalc = { L: w, D_m: parseFloat(dM.toFixed(2)), gw: gwKg };
