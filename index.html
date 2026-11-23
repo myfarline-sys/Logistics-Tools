@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.8 — Logistics Senawang</title>
+<title>Kalkulator Muatan & Cadangan Lori V5.9 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -783,6 +783,38 @@ body {
  border-radius: 8px;
  font-size: 12px;
 }
+.irc-lori-strip {
+ grid-column: 1 / -1;
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ gap: 5px;
+ padding-top: 7px;
+ margin-top: 2px;
+ border-top: 1px dashed #cbd5e1;
+ font-size: 11px;
+}
+.irc-lori-lbl {
+ color: #475569;
+ font-weight: 700;
+ margin-right: 2px;
+}
+.irc-lori-chip {
+ background: #eff6ff;
+ border: 1px solid #bfdbfe;
+ color: #1e40af;
+ border-radius: 6px;
+ padding: 2px 7px;
+ font-size: 10.8px;
+ font-weight: 700;
+ display: inline-flex;
+ align-items: center;
+ gap: 3px;
+}
+.irc-lori-chip strong {
+ color: #0f172a;
+ font-weight: 800;
+}
 .irc-actions {
  margin-top: 8px;
  padding-top: 7px;
@@ -1074,7 +1106,7 @@ body {
 
 <div class="top-header">
  <div class="header-row1">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.8</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.9</span></h1>
  <span class="count-pill" id="headerCountPill">20 REKOD</span>
  </div>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
@@ -1539,12 +1571,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.8 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V5.9 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.8)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.9)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -1758,8 +1790,8 @@ function doPost(e) {
 <script>
 const SPREADSHEET_ID = '1KN1aFkJ-62OVTvQRvsjb-YQPV1yNQ4F5bdf7eQZ2A6M';
 const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-H9ZCVegUg6dUzVMHww1RwGryIHYOu8dhdKMiEL_uxhdipYAgUSx9nUQCXUx5zcYg/exec';
-const CACHE_KEY = 'solmax_v5_8_all_records';
-const FAB_INT_KEY = 'solmax_v5_8_fab_internal';
+const CACHE_KEY = 'solmax_v5_9_all_records';
+const FAB_INT_KEY = 'solmax_v5_9_fab_internal';
 const ARTICLE_OUT_KEY = 'solmax_v5_article_out';
 const CUSTOM_KEY = 'solmax_v4_custom_records';
 const LAST_SYNC_KEY = 'solmax_v5_last_sync_ts';
@@ -2090,10 +2122,10 @@ function isSpreadsheetErrorCell(v) {
 
 function normHeader(v) {
  return str(v)
-  .toLowerCase()
-  .replace(/[\u2018\u2019]/g, "'")
-  .replace(/\s+/g, ' ')
-  .trim();
+ .toLowerCase()
+ .replace(/[\u2018\u2019]/g, "'")
+ .replace(/\s+/g, ' ')
+ .trim();
 }
 
 function parseFabInternal(rows) {
@@ -2103,118 +2135,118 @@ function parseFabInternal(rows) {
  let colMap = {};
 
  for (let i = 0; i < Math.min(rows.length, 25); i++) {
-  const lower = rows[i].map(c => normHeader(c));
-  const hasProductId = lower.some(h => h === 'article' || h === 'item code' || h.includes('grade'));
-  const hasDims = lower.includes('length') && lower.includes('width') && (lower.includes('high') || lower.includes('height'));
-  const isMiniCalc = lower.some(h => h.includes('estimated calculator') || h.includes('bacaan kapasiti') || h.includes('julat rekod'));
-  if (hasProductId && hasDims && !isMiniCalc) {
-   headerRow = i;
-   lower.forEach((h, idx) => {
-    if (h === 'article' || h.includes('grade')) colMap.article = idx;
-    else if (h === 'item code' || h === 'code') colMap.code = idx;
-    else if (h === 'size') colMap.size = idx;
-    else if (h === 'length') colMap.L = idx;
-    else if (h === 'width') colMap.W = idx;
-    else if (h === 'high' || h === 'height') colMap.H = idx;
-    else if (
-     (h === "40'" || h.startsWith("40'") || h.includes("40'hc") || h.includes("40ft") || h.includes("kontena 40")) &&
-     !h.includes('est') && !h.includes('fold') && !h.includes('layer')
-    ) colMap.c40 = idx;
-    else if (
-     (h === "20'" || h.startsWith("20'") || h.includes("20ft") || h.includes("kontena 20")) &&
-     !h.includes('est') && !h.includes('fold') && !h.includes('layer')
-    ) colMap.c20 = idx;
-    else if (h.includes('est b4') && colMap.est40 === undefined) colMap.est40 = idx;
-    else if (h.includes('est b4')) colMap.est20 = idx;
-    else if (h.includes('gw') || h.includes('weight')) colMap.gw = idx;
-    else if (h === 'update' || h === 'date' || h === 'tarikh') colMap.upd = idx;
-    else if (h === 'status') colMap.status = idx;
-   });
-   break;
-  }
+ const lower = rows[i].map(c => normHeader(c));
+ const hasProductId = lower.some(h => h === 'article' || h === 'item code' || h.includes('grade'));
+ const hasDims = lower.includes('length') && lower.includes('width') && (lower.includes('high') || lower.includes('height'));
+ const isMiniCalc = lower.some(h => h.includes('estimated calculator') || h.includes('bacaan kapasiti') || h.includes('julat rekod'));
+ if (hasProductId && hasDims && !isMiniCalc) {
+ headerRow = i;
+ lower.forEach((h, idx) => {
+ if (h === 'article' || h.includes('grade')) colMap.article = idx;
+ else if (h === 'item code' || h === 'code') colMap.code = idx;
+ else if (h === 'size') colMap.size = idx;
+ else if (h === 'length') colMap.L = idx;
+ else if (h === 'width') colMap.W = idx;
+ else if (h === 'high' || h === 'height') colMap.H = idx;
+ else if (
+ (h === "40'" || h.startsWith("40'") || h.includes("40'hc") || h.includes("40ft") || h.includes("kontena 40")) &&
+ !h.includes('est') && !h.includes('fold') && !h.includes('layer')
+ ) colMap.c40 = idx;
+ else if (
+ (h === "20'" || h.startsWith("20'") || h.includes("20ft") || h.includes("kontena 20")) &&
+ !h.includes('est') && !h.includes('fold') && !h.includes('layer')
+ ) colMap.c20 = idx;
+ else if (h.includes('est b4') && colMap.est40 === undefined) colMap.est40 = idx;
+ else if (h.includes('est b4')) colMap.est20 = idx;
+ else if (h.includes('gw') || h.includes('weight')) colMap.gw = idx;
+ else if (h === 'update' || h === 'date' || h === 'tarikh') colMap.upd = idx;
+ else if (h === 'status') colMap.status = idx;
+ });
+ break;
+ }
  }
  if (headerRow === -1) return { fab, cat };
 
  for (let i = headerRow + 1; i < rows.length; i++) {
-  const r = rows[i];
-  if (!r || r.some(c => isSpreadsheetErrorCell(c))) continue;
+ const r = rows[i];
+ if (!r || r.some(c => isSpreadsheetErrorCell(c))) continue;
 
-  const rowJoined = r.map(c => normHeader(c)).join(' ');
-  if (
-   rowJoined.includes('estimated calculator') ||
-   rowJoined.includes('jenis kontena') ||
-   rowJoined.includes('bacaan kapasiti') ||
-   rowJoined.includes('julat rekod sebenar')
-  ) {
-   break;
-  }
+ const rowJoined = r.map(c => normHeader(c)).join(' ');
+ if (
+ rowJoined.includes('estimated calculator') ||
+ rowJoined.includes('jenis kontena') ||
+ rowJoined.includes('bacaan kapasiti') ||
+ rowJoined.includes('julat rekod sebenar')
+ ) {
+ break;
+ }
 
-  let article = colMap.article !== undefined ? str(r[colMap.article]) : str(r[0]);
-  let code = colMap.code !== undefined ? str(r[colMap.code]) : str(r[1]);
-  let size = colMap.size !== undefined ? str(r[colMap.size]) : str(r[2]);
+ let article = colMap.article !== undefined ? str(r[colMap.article]) : str(r[0]);
+ let code = colMap.code !== undefined ? str(r[colMap.code]) : str(r[1]);
+ let size = colMap.size !== undefined ? str(r[colMap.size]) : str(r[2]);
 
-  if (!article && !code) continue;
-  if (article.toLowerCase() === 'article' || code.toLowerCase() === 'item code') continue;
+ if (!article && !code) continue;
+ if (article.toLowerCase() === 'article' || code.toLowerCase() === 'item code') continue;
 
-  const L = num(r[colMap.L ?? 4]);
-  const W = num(r[colMap.W ?? 5]);
-  const H = num(r[colMap.H ?? 6]);
-  const rawC40 = colMap.c40 !== undefined ? num(r[colMap.c40]) : null;
-  const rawC20 = colMap.c20 !== undefined ? num(r[colMap.c20]) : null;
-  const gw = colMap.gw !== undefined ? num(r[colMap.gw]) : null;
-  const upd = colMap.upd !== undefined ? str(r[colMap.upd]) : '';
-  const rawStatus = colMap.status !== undefined ? str(r[colMap.status]) : '';
+ const L = num(r[colMap.L ?? 4]);
+ const W = num(r[colMap.W ?? 5]);
+ const H = num(r[colMap.H ?? 6]);
+ const rawC40 = colMap.c40 !== undefined ? num(r[colMap.c40]) : null;
+ const rawC20 = colMap.c20 !== undefined ? num(r[colMap.c20]) : null;
+ const gw = colMap.gw !== undefined ? num(r[colMap.gw]) : null;
+ const upd = colMap.upd !== undefined ? str(r[colMap.upd]) : '';
+ const rawStatus = colMap.status !== undefined ? str(r[colMap.status]) : '';
 
-  const hasActual = (rawC40 !== null && rawC40 > 0) || (rawC20 !== null && rawC20 > 0);
-  let finalC40 = hasActual ? rawC40 : null;
-  let finalC20 = hasActual ? rawC20 : null;
-  let status = hasActual ? 'Sebenar' : (rawStatus || '');
+ const hasActual = (rawC40 !== null && rawC40 > 0) || (rawC20 !== null && rawC20 > 0);
+ let finalC40 = hasActual ? rawC40 : null;
+ let finalC20 = hasActual ? rawC20 : null;
+ let status = hasActual ? 'Sebenar' : (rawStatus || '');
 
-  if (!hasActual && L && W && H) {
-   const est = calcEstFabCapacity(L, W, H);
-   finalC40 = est.est40;
-   finalC20 = est.est20;
-   status = 'Anggaran';
-  }
+ if (!hasActual && L && W && H) {
+ const est = calcEstFabCapacity(L, W, H);
+ finalC40 = est.est40;
+ finalC20 = est.est20;
+ status = 'Anggaran';
+ }
 
-  const isEstimated = !hasActual && (Boolean(L && W && H) || status.toLowerCase().includes('anggaran'));
+ const isEstimated = !hasActual && (Boolean(L && W && H) || status.toLowerCase().includes('anggaran'));
 
-  if ((L && W && H) || hasActual || code) {
-   if (!article && code) article = code.split(' ')[0];
-   const finalArt = article || 'FAB';
-   const finalCode = code || `${finalArt} (${L}x${W}x${H})`;
-   const finalSize = size || (L && W && H ? `${L}m x ${W}m x ${H}m` : '');
+ if ((L && W && H) || hasActual || code) {
+ if (!article && code) article = code.split(' ')[0];
+ const finalArt = article || 'FAB';
+ const finalCode = code || `${finalArt} (${L}x${W}x${H})`;
+ const finalSize = size || (L && W && H ? `${L}m x ${W}m x ${H}m` : '');
 
-   if (L && W && H && hasActual) {
-    fab.push({
-     article: finalArt,
-     code: finalCode,
-     size: finalSize,
-     L, W, H,
-     c20: rawC20 ?? 0,
-     c40: rawC40 ?? 0,
-     gw
-    });
-   }
+ if (L && W && H && hasActual) {
+ fab.push({
+ article: finalArt,
+ code: finalCode,
+ size: finalSize,
+ L, W, H,
+ c20: rawC20 ?? 0,
+ c40: rawC40 ?? 0,
+ gw
+ });
+ }
 
-   if ((finalC40 !== null && finalC40 > 0) || (finalC20 !== null && finalC20 > 0) || code) {
-    cat.push({
-     sheet: 'Fab (Internal)',
-     article: finalArt,
-     code: finalCode,
-     size: finalSize,
-     width: W,
-     length: L,
-     height: H,
-     gw,
-     c20: finalC20,
-     c40: finalC40,
-     status,
-     isEstimated,
-     update: upd || '-'
-    });
-   }
-  }
+ if ((finalC40 !== null && finalC40 > 0) || (finalC20 !== null && finalC20 > 0) || code) {
+ cat.push({
+ sheet: 'Fab (Internal)',
+ article: finalArt,
+ code: finalCode,
+ size: finalSize,
+ width: W,
+ length: L,
+ height: H,
+ gw,
+ c20: finalC20,
+ c40: finalC40,
+ status,
+ isEstimated,
+ update: upd || '-'
+ });
+ }
+ }
  }
  return { fab, cat };
 }
@@ -2381,7 +2413,7 @@ function parseNwWovenSheet(rows, sheetName = 'NW (Internal)') {
  let hIdx = 2;
  let col = {
  article: 0, code: 1, size: 2, sub: 3, len: 4, dia: 5, mass: 6, gw: 7,
- c20: 8, c40: 9, sus40: 10, sus20: 11, upd: 12
+ c20: 8, c40: 9, lori20: -1, treler40: -1, sus40: 10, sus20: 11, upd: 12
  };
  for (let i = 0; i < Math.min(rows.length, 8); i++) {
  const lower = rows[i].map(c => normHeader(c));
@@ -2399,6 +2431,8 @@ function parseNwWovenSheet(rows, sheetName = 'NW (Internal)') {
  else if (h.includes('gw')) col.gw = idx;
  else if (h.includes("20'") && !h.includes('lori') && !h.includes('susunan')) col.c20 = idx;
  else if (h.includes("40'") && !h.includes('lori') && !h.includes('susunan')) col.c40 = idx;
+ else if (h.includes('lori') && (h.includes("20'") || h.includes("30'"))) col.lori20 = idx;
+ else if (h.includes('treler') || (h.includes('lori') && h.includes("40'"))) col.treler40 = idx;
  else if (h.includes('susunan 40')) col.sus40 = idx;
  else if (h.includes('susunan 20')) col.sus20 = idx;
  else if (h === 'update' || h === 'date') col.upd = idx;
@@ -2424,9 +2458,15 @@ function parseNwWovenSheet(rows, sheetName = 'NW (Internal)') {
  const gw = num(r[col.gw]);
  const c20 = num(r[col.c20]);
  const c40 = num(r[col.c40]);
+ const lori20 = (col.lori20 !== undefined && col.lori20 !== -1) ? num(r[col.lori20]) : null;
+ const treler40 = (col.treler40 !== undefined && col.treler40 !== -1) ? num(r[col.treler40]) : null;
  const sus40 = col.sus40 !== undefined ? str(r[col.sus40]) : '';
  const sus20 = col.sus20 !== undefined ? str(r[col.sus20]) : '';
  const upd = col.upd !== undefined ? str(r[col.upd]) : '';
+
+ const sheetTrucks = {};
+ if (lori20 && lori20 > 0) sheetTrucks.tr20 = lori20;
+ if (treler40 && treler40 > 0) sheetTrucks.tr40 = treler40;
 
  out.push({
  sheet: sheetName,
@@ -2439,6 +2479,7 @@ function parseNwWovenSheet(rows, sheetName = 'NW (Internal)') {
  gw,
  c20,
  c40,
+ trucks: Object.keys(sheetTrucks).length ? sheetTrucks : null,
  susunan40: sus40,
  susunan20: sus20,
  update: upd || '-'
@@ -2663,7 +2704,8 @@ function articleOutToCatalogItems(aoList) {
  gw: r.gw,
  c20: r.trucks.tr20 || null,
  c40: r.trucks.tr40 || null,
- packing: packInfo,
+ trucks: r.trucks,
+ packing: r.note || '',
  update: r.loadingTime || '-'
  };
  });
@@ -3164,7 +3206,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.8)*`,
+ `*Anggaran Muatan Kontena (Logistics V5.9)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3415,7 +3457,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.8)*`,
+ `*Keperluan Kontena Gabungan (Logistics V5.9)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -3464,6 +3506,59 @@ function selectCatSheet(sheet, btn) {
 }
 
 let renderedCatalogSlice = [];
+
+const CATALOG_TRUCK_DEFS = [
+ { key: 't1', label: 'Lori 1 Tan' },
+ { key: 't3', label: 'Lori 3 Tan' },
+ { key: 't5', label: 'Lori 5 Tan' },
+ { key: 't10', label: 'Lori 10 Tan' },
+ { key: 'tr20', label: "Lori 30'" },
+ { key: 'tr40', label: "Treler 40'" }
+];
+
+function normMatchToken(s) {
+ return str(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function getActualTruckBadgesForRecord(r) {
+ const maxMap = { t1: 0, t3: 0, t5: 0, t10: 0, tr20: 0, tr40: 0 };
+ const applyTruckObj = (tObj) => {
+  if (!tObj) return;
+  CATALOG_TRUCK_DEFS.forEach(td => {
+   const v = num(tObj[td.key]);
+   if (v !== null && v > maxMap[td.key]) maxMap[td.key] = v;
+  });
+ };
+
+ // 1. Direct truck capacities stored on the record itself (e.g., Article Out, Woven Internal, Manual)
+ if (r.trucks) applyTruckObj(r.trucks);
+ if (r.t1 || r.t3 || r.t5 || r.t10 || r.tr20 || r.tr40) applyTruckObj(r);
+
+ // 2. Cross-reference actual records from Article Out (matching Item Code or Article + Size)
+ if (r.sheet !== 'Article Out' && Array.isArray(articleOutRecords) && articleOutRecords.length > 0) {
+  const rCodeNorm = normMatchToken(r.code);
+  const rArtNorm = normMatchToken(r.article);
+  const rSizeNorm = normSizeKey(r.size);
+
+  articleOutRecords.forEach(ao => {
+   const aoCodeNorm = normMatchToken(ao.code);
+   const aoArtNorm = normMatchToken(ao.article);
+   const aoSizeNorm = normSizeKey(ao.size);
+
+   const codeMatch = rCodeNorm && aoCodeNorm && rCodeNorm.length >= 4 && rCodeNorm === aoCodeNorm;
+   const artMatch = rArtNorm && aoArtNorm && rArtNorm === aoArtNorm;
+   const sizeMatch = !rSizeNorm || !aoSizeNorm || rSizeNorm === aoSizeNorm;
+
+   if (codeMatch || (artMatch && sizeMatch)) {
+    applyTruckObj(ao.trucks);
+   }
+  });
+ }
+
+ return CATALOG_TRUCK_DEFS
+  .filter(td => maxMap[td.key] > 0)
+  .map(td => ({ key: td.key, label: td.label, qty: maxMap[td.key] }));
+}
 
 function renderCatalog() {
  const q = document.getElementById('catSearch').value.toLowerCase().trim();
@@ -3524,10 +3619,17 @@ function renderCatalog() {
  ${r.gw ? ` &bull; GW: <strong>${r.gw} kg</strong>` : ''}
  ${r.susunan40 ? ` &bull; Susunan 40': <strong>${esc(r.susunan40)}</strong>` : ''}
  </div>
- <div class="irc-caps">
+ ${(() => {
+  const truckList = getActualTruckBadgesForRecord(r);
+  const truckStripHtml = truckList.length > 0
+   ? `<div class="irc-lori-strip"><span class="irc-lori-lbl">&#x1F69B; Data Lori:</span>${truckList.map(t => `<span class="irc-lori-chip">${esc(t.label)}: <strong>${t.qty}</strong></span>`).join('')}</div>`
+   : '';
+  return `<div class="irc-caps">
  <div>20' Container: <strong>${r.c20 !== null && r.c20 !== undefined ? estPrefix + r.c20 : '-'}</strong></div>
  <div>40' / 40'HC: <strong style="color:${c40Color};">${r.c40 !== null && r.c40 !== undefined ? estPrefix + r.c40 : '-'}</strong></div>
- </div>
+ ${truckStripHtml}
+ </div>`;
+ })()}
  ${isEst ? `<div class="est-note-strip">&#x1F9EE; Status: <strong>Anggaran</strong> (Rujukan Est Calculator FAB 0.92 — belum ada bacaan kontena sebenar)</div>` : ''}
  <div class="irc-actions">
  <div class="irc-date">&#x1F4C5; Tarikh: <strong>${esc(dateText)}</strong></div>
@@ -3550,11 +3652,15 @@ function copyCatalogItemWA(idx) {
  const isEst = Boolean(r.isEstimated || (r.status && String(r.status).toLowerCase().includes('anggaran')));
  const dateText = (r.update && r.update !== '-') ? r.update : '';
  const prefix = isEst ? '~' : '';
+ const truckList = getActualTruckBadgesForRecord(r);
  const lines = [
  `*${r.code || r.article}* (${r.article || r.sheet})${isEst ? ' [STATUS: ANGGARAN]' : ''}`,
  `Saiz: ${r.size || '-'}`,
  `20' Container: ${r.c20 != null ? prefix + r.c20 : '-'} | 40'HC: ${r.c40 != null ? prefix + r.c40 : '-'}`
  ];
+ if (truckList.length > 0) {
+  lines.push(`Data Lori Sebenar: ${truckList.map(t => `${t.label} (${t.qty})`).join(' | ')}`);
+ }
  if (isEst) lines.push(`Nota: Anggaran Est Calculator FAB (tiada bacaan sebenar lagi)`);
  if (r.gw) lines.push(`Berat GW: ${r.gw} kg`);
  if (r.susunan40) lines.push(`Susunan 40': ${r.susunan40}`);
@@ -3947,7 +4053,7 @@ function copyLoriItemWA(idx) {
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.8)*`,
+ `*Rekod Lori Article Out (Logistics V5.9)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -4152,7 +4258,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_8',
+ app: 'Logistics_Kalkulator_Muatan_V5_9',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
