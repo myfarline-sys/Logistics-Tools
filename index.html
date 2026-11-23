@@ -1217,7 +1217,7 @@ body {
         </div>
       </div>
       <div class="roll-res-strip">
-        <div id="rollCalcSummary">Diameter: <strong>52.7 cm (0.53 m)</strong> &bull; Berat: <strong>~108 kg</strong></div>
+        <div id="rollCalcSummary">Diameter: <strong>52.7 cm (0.53 m)</strong> &bull; Berat: <strong>108 kg</strong></div>
         <button type="button" class="btn-apply-roll" onclick="applyRollToDim()">Guna Saiz Ini</button>
       </div>
     </div>
@@ -1396,6 +1396,7 @@ body {
     <div class="chip-scroll" id="catChips">
       <button type="button" class="cat-chip active" data-sheet="ALL" onclick="selectCatSheet('ALL', this)">Semua</button>
       <button type="button" class="cat-chip" data-sheet="MANUAL" onclick="selectCatSheet('MANUAL', this)">&#x2B50; Rekod Manual (<span id="customChipCount">0</span>)</button>
+      <button type="button" class="cat-chip" data-sheet="Rekod App" onclick="selectCatSheet('Rekod App', this)">&#x2601; Rekod App (Sheet)</button>
       <button type="button" class="cat-chip" data-sheet="Upcoming SA" onclick="selectCatSheet('Upcoming SA', this)">Upcoming SA (Miragrid)</button>
       <button type="button" class="cat-chip" data-sheet="Article Out" onclick="selectCatSheet('Article Out', this)">Article Out</button>
       <button type="button" class="cat-chip" data-sheet="Fab (Internal)" onclick="selectCatSheet('Fab (Internal)', this)">Fab (Internal)</button>
@@ -1465,7 +1466,7 @@ body {
             <option value="t3">Lori 3 Tan</option>
             <option value="t5">Lori 5 Tan</option>
             <option value="t10">Lori 10 Tan</option>
-            <option value="tr20">Treler 20'</option>
+            <option value="tr20">Lori 30' / Treler 20'</option>
             <option value="tr40">Treler 40'</option>
           </select>
         </div>
@@ -1671,7 +1672,7 @@ function doPost(e) {
           <input type="number" step="1" id="cmT10" class="form-input" placeholder="0">
         </div>
         <div class="form-group">
-          <label>Treler 20'</label>
+          <label>Lori 30' / Treler 20'</label>
           <input type="number" step="1" id="cmTr20" class="form-input" placeholder="0">
         </div>
         <div class="form-group">
@@ -1684,7 +1685,7 @@ function doPost(e) {
     <div class="form-grid-2">
       <div class="form-group">
         <label>Tarikh Kemaskini</label>
-        <input type="text" id="cmDate" class="form-input" placeholder="cth: 23/11/2026">
+        <input type="text" id="cmDate" class="form-input" placeholder="cth: 22/11/2026">
       </div>
       <div class="form-group">
         <label>Nota / Packing</label>
@@ -1734,7 +1735,7 @@ function doPost(e) {
   </div>
 </div>
 
-<!-- MODAL: SALIN MANUAL JIKA ANDROID SEKAT CLIPBOARD -->
+<!-- MODAL: SALIN MANUAL JIKA ANDROID SEKTOR CLIPBOARD -->
 <div class="modal-bg" id="manualCopyModal" onclick="if(event.target===this) closeManualCopyModal()">
   <div class="modal-card">
     <div class="modal-head">
@@ -1796,8 +1797,8 @@ const SEED_CATALOG = [
   { sheet: 'Enquiry', article: 'GT650MC', code: 'SGT650MC 095 115 L2F20', size: '2.5m x 0.85m x 0.85m', width: 0.85, length: 2.5, height: 0.85, c20: 12, c40: 24, update: '-' },
   { sheet: 'Enquiry', article: 'GT650MC', code: 'SGT650MC 095 154 L3F20F', size: '2.6m x 0.9m x 0.9m', width: 0.9, length: 2.6, height: 0.9, c20: 10, c40: 20, update: '12/8/2026' },
   { sheet: 'Enquiry', article: 'GT550MC', code: 'GT650MC 095 310 L3F20F', size: '2.6m x 1.2m x 1.2m', width: 1.2, length: 2.6, height: 1.2, c20: 4, c40: 12, update: '12/8/2026' },
-  { sheet: 'NW (Internal)', article: 'KE2300', code: 'SKE2300 000 400 035', size: '4.0m x 35m', width: 4.0, length: 35, mass: 2300, gw: 352, c20: 8, c40: 27, susunan40: '3+3+3', susunan20: '3+3+2', update: '20/11/2026' },
-  { sheet: 'NW (Internal)', article: 'KE2000', code: 'SKE2000 000 400 045', size: '4.0m x 45m', width: 4.0, length: 45, mass: 2000, gw: null, c20: 6, c40: 24, susunan40: '', susunan20: '', update: '20/11/2026' },
+  { sheet: 'NW (Internal)', article: 'KE2300', code: 'SKE2300 000 400 035', size: '4.0m x 35m', width: 4.0, length: 35, mass: 2300, gw: 334, c20: 8, c40: 27, susunan40: '3+3+3', susunan20: '3+3+2', update: '20/11/2026' },
+  { sheet: 'NW (Internal)', article: 'KE2000', code: 'SKE2000 000 400 045', size: '4.0m x 45m', width: 4.0, length: 45, mass: 2000, gw: 372, c20: 6, c40: 24, susunan40: '', susunan20: '', update: '20/11/2026' },
   { sheet: 'Woven (Internal)', article: 'PET400/100', code: 'PET400/100 (002)', size: '5.0m x 100m', width: 5.0, length: 100, gw: 443, c20: 30, c40: 54, susunan40: 'Tapak 6+6 Z', update: '-' },
   { sheet: 'Woven (Internal)', article: 'PET200/100', code: 'PET200/100 (001)', size: '5.0m x 100m', width: 5.0, length: 100, gw: 270, c20: 42, c40: 92, susunan40: 'Tapak 7+6', update: '-' },
   { sheet: 'Bentoliner (Internal)', article: 'BENTOLINER', code: 'ENM5000', size: '4.50m x 30.00m', width: 4.5, length: 30.0, mass: 5380, gw: 780, c20: 20, c40: 30, update: '-' },
@@ -2549,7 +2550,7 @@ function parseArticleOutSheet(rows) {
         else if (h.includes('3 tan')) col.t3 = idx;
         else if (h.includes('5 tan')) col.t5 = idx;
         else if (h.includes('10 tan')) col.t10 = idx;
-        else if (h.includes("20'") || h.includes('20ft')) col.tr20 = idx;
+        else if (h.includes("20'") || h.includes('20ft') || h.includes("30'")) col.tr20 = idx;
         else if (h.includes("40'") || h.includes('treler')) col.tr40 = idx;
         else if (h.includes('note')) col.note = idx;
       });
@@ -2617,7 +2618,7 @@ function articleOutToCatalogItems(aoList) {
     if (r.trucks.t3) truckBadges.push(`3T:${r.trucks.t3}`);
     if (r.trucks.t5) truckBadges.push(`5T:${r.trucks.t5}`);
     if (r.trucks.t10) truckBadges.push(`10T:${r.trucks.t10}`);
-    if (r.trucks.tr20) truckBadges.push(`Tr20':${r.trucks.tr20}`);
+    if (r.trucks.tr20) truckBadges.push(`L30'/Tr20':${r.trucks.tr20}`);
     if (r.trucks.tr40) truckBadges.push(`Tr40':${r.trucks.tr40}`);
     const packInfo = [truckBadges.join(' | '), r.note].filter(Boolean).join(' • ');
     return {
@@ -2814,7 +2815,7 @@ async function syncGoogleSheets(notify = false) {
       }
     }
 
-    if (result.newCat && result.newCat.length > 0) baseCatalogRecords = result.newCat;
+    baseCatalogRecords = result.newCat;
     if (result.newFab && result.newFab.length > 0) fabInternalRecords = result.newFab;
     if (result.newAo && result.newAo.length > 0) articleOutRecords = result.newAo;
 
@@ -2869,7 +2870,7 @@ function handleManualExcel(ev) {
         if (parsed.ao) newAo = newAo.concat(parsed.ao);
       });
       if (newCat.length > 0 || newAo.length > 0) {
-        if (newCat.length > 0) baseCatalogRecords = newCat;
+        baseCatalogRecords = newCat;
         if (newFab.length > 0) fabInternalRecords = newFab;
         if (newAo.length > 0) articleOutRecords = newAo;
         const nowIso = new Date().toISOString();
@@ -3024,12 +3025,12 @@ function recalcSizeEstimator() {
   document.getElementById('tbl40L').textContent = `${f40L.toFixed(2)} (${n40L})`;
   document.getElementById('tbl40W').textContent = f40W.toFixed(2);
   document.getElementById('tbl40H').textContent = f40H.toFixed(2);
-  document.getElementById('tbl40Vol').textContent = `${vol.toFixed(2)} m\u00B3`;
+  document.getElementById('tbl40Vol').textContent = `${vol.toFixed(2)} m³`;
 
   document.getElementById('tbl20L').textContent = `${f20L.toFixed(2)} (${n20L})`;
   document.getElementById('tbl20W').textContent = f20W.toFixed(2);
   document.getElementById('tbl20H').textContent = f20H.toFixed(2);
-  document.getElementById('tbl20Vol').textContent = `${vol.toFixed(2)} m\u00B3`;
+  document.getElementById('tbl20Vol').textContent = `${vol.toFixed(2)} m³`;
 
   const pL = activePlanCont === '40' ? n40L : n20L;
   const pW = activePlanCont === '40' ? n40W : n20W;
@@ -3486,7 +3487,7 @@ function renderCatalog() {
         <div class="irc-sub">
           ${r.article ? `Article: <strong>${esc(r.article)}</strong>` : ''}
           ${r.size ? ` &bull; Saiz: <strong>${esc(r.size)}</strong>` : ''}
-          ${r.mass ? ` &bull; GSM: <strong>${r.mass} g/m&sup2;</strong>` : ''}
+          ${r.mass ? ` &bull; GSM: <strong>${r.mass} g/m²</strong>` : ''}
           ${r.packing ? ` &bull; <span style="color:#b45309;">${esc(r.packing)}</span>` : ''}
           ${r.gw ? ` &bull; GW: <strong>${r.gw} kg</strong>` : ''}
           ${r.susunan40 ? ` &bull; Susunan 40': <strong>${esc(r.susunan40)}</strong>` : ''}
@@ -3534,7 +3535,7 @@ const TRUCK_META = [
   { key: 't3', label: 'Lori 3 Tan', rank: 2 },
   { key: 't5', label: 'Lori 5 Tan', rank: 3 },
   { key: 't10', label: 'Lori 10 Tan', rank: 4 },
-  { key: 'tr20', label: "Treler 20'", rank: 5 },
+  { key: 'tr20', label: "Lori 30' / Treler 20'", rank: 5 },
   { key: 'tr40', label: "Treler 40'", rank: 6 }
 ];
 
@@ -4211,12 +4212,7 @@ function importJsonFromFile(ev) {
 
 function esc(s) {
   if (s === null || s === undefined) return '';
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function legacyCopyExec(txt) {
