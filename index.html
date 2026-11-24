@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.12 — Logistics Senawang</title>
+<title>Kalkulator Muatan & Cadangan Lori V5.14 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -1107,7 +1107,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.12</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.14</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1465,9 +1465,12 @@ body {
 <!-- TAB 5: CARIAN & CADANGAN LORI (Article Out Truck Recommender) -->
 <div id="view-lori" class="tab-view">
  <div class="sec-card" style="padding-bottom:12px;">
- <div class="sec-head" style="margin-bottom:8px;">
+ <div class="sec-head" style="margin-bottom:6px;">
  <h2 class="sec-title">&#x1F69B; CADANGAN LORI MENGIKUT ARTICLE &amp; KUANTITI</h2>
  <span class="badge-blue" id="loriCountBadge">0 rekod</span>
+ </div>
+ <div style="color:#dc2626;font-weight:800;font-size:12px;line-height:1.4;margin-bottom:8px;">
+ PENTING : Pastikan panjang setiap Lori bersesuaian dengan Item/Grade/Article
  </div>
  <div style="font-size:12px;color:#475569;margin-bottom:10px;">
  Pilih <strong>Article</strong>, <strong>Saiz</strong> (cth: 5.0m x 100m / 140m / 160m) dan masukkan <strong>Kuantiti</strong> untuk mendapatkan <strong>jenis lori cadangan paling sesuai</strong>.
@@ -1576,12 +1579,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.12 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V5.14 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.12)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.14)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -3211,7 +3214,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.12)*`,
+ `*Anggaran Muatan Kontena (Logistics V5.14)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3462,7 +3465,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.12)*`,
+ `*Keperluan Kontena Gabungan (Logistics V5.14)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -4058,7 +4061,7 @@ function copyLoriItemWA(idx) {
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.12)*`,
+ `*Rekod Lori Article Out (Logistics V5.14)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -4263,7 +4266,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_12',
+ app: 'Logistics_Kalkulator_Muatan_V5_14',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
