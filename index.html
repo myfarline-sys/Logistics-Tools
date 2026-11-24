@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.9 — Logistics Senawang</title>
+<title>Kalkulator Muatan & Cadangan Lori V5.12 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -1105,11 +1105,16 @@ body {
 <body>
 
 <div class="top-header">
- <div class="header-row1">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.9</span></h1>
- <span class="count-pill" id="headerCountPill">20 REKOD</span>
- </div>
+ <div class="header-row1" style="align-items:flex-start;">
+ <div style="min-width:0;flex:1;">
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.12</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
+ </div>
+ <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+ <span class="count-pill" id="headerCountPill">20 REKOD</span>
+ <a class="mini-btn" href="https://myfarline-sys.github.io/Lagu-Log/" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;" style="text-decoration:none;background:rgba(14,165,233,0.32);border-color:rgba(56,189,248,0.75);color:#e0f2fe;padding:2px 8px;font-size:10px;border-radius:999px;">&#x1F3B5; Lagu-Log</a>
+ </div>
+ </div>
  <div class="sync-strip">
  <div class="sync-status-wrap">
  <div class="sync-status">
@@ -1571,12 +1576,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.9 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V5.12 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.9)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.12)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -3206,7 +3211,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.9)*`,
+ `*Anggaran Muatan Kontena (Logistics V5.12)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3457,7 +3462,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.9)*`,
+ `*Keperluan Kontena Gabungan (Logistics V5.12)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -3523,11 +3528,11 @@ function normMatchToken(s) {
 function getActualTruckBadgesForRecord(r) {
  const maxMap = { t1: 0, t3: 0, t5: 0, t10: 0, tr20: 0, tr40: 0 };
  const applyTruckObj = (tObj) => {
-  if (!tObj) return;
-  CATALOG_TRUCK_DEFS.forEach(td => {
-   const v = num(tObj[td.key]);
-   if (v !== null && v > maxMap[td.key]) maxMap[td.key] = v;
-  });
+ if (!tObj) return;
+ CATALOG_TRUCK_DEFS.forEach(td => {
+ const v = num(tObj[td.key]);
+ if (v !== null && v > maxMap[td.key]) maxMap[td.key] = v;
+ });
  };
 
  // 1. Direct truck capacities stored on the record itself (e.g., Article Out, Woven Internal, Manual)
@@ -3536,28 +3541,28 @@ function getActualTruckBadgesForRecord(r) {
 
  // 2. Cross-reference actual records from Article Out (matching Item Code or Article + Size)
  if (r.sheet !== 'Article Out' && Array.isArray(articleOutRecords) && articleOutRecords.length > 0) {
-  const rCodeNorm = normMatchToken(r.code);
-  const rArtNorm = normMatchToken(r.article);
-  const rSizeNorm = normSizeKey(r.size);
+ const rCodeNorm = normMatchToken(r.code);
+ const rArtNorm = normMatchToken(r.article);
+ const rSizeNorm = normSizeKey(r.size);
 
-  articleOutRecords.forEach(ao => {
-   const aoCodeNorm = normMatchToken(ao.code);
-   const aoArtNorm = normMatchToken(ao.article);
-   const aoSizeNorm = normSizeKey(ao.size);
+ articleOutRecords.forEach(ao => {
+ const aoCodeNorm = normMatchToken(ao.code);
+ const aoArtNorm = normMatchToken(ao.article);
+ const aoSizeNorm = normSizeKey(ao.size);
 
-   const codeMatch = rCodeNorm && aoCodeNorm && rCodeNorm.length >= 4 && rCodeNorm === aoCodeNorm;
-   const artMatch = rArtNorm && aoArtNorm && rArtNorm === aoArtNorm;
-   const sizeMatch = !rSizeNorm || !aoSizeNorm || rSizeNorm === aoSizeNorm;
+ const codeMatch = rCodeNorm && aoCodeNorm && rCodeNorm.length >= 4 && rCodeNorm === aoCodeNorm;
+ const artMatch = rArtNorm && aoArtNorm && rArtNorm === aoArtNorm;
+ const sizeMatch = !rSizeNorm || !aoSizeNorm || rSizeNorm === aoSizeNorm;
 
-   if (codeMatch || (artMatch && sizeMatch)) {
-    applyTruckObj(ao.trucks);
-   }
-  });
+ if (codeMatch || (artMatch && sizeMatch)) {
+ applyTruckObj(ao.trucks);
+ }
+ });
  }
 
  return CATALOG_TRUCK_DEFS
-  .filter(td => maxMap[td.key] > 0)
-  .map(td => ({ key: td.key, label: td.label, qty: maxMap[td.key] }));
+ .filter(td => maxMap[td.key] > 0)
+ .map(td => ({ key: td.key, label: td.label, qty: maxMap[td.key] }));
 }
 
 function renderCatalog() {
@@ -3620,11 +3625,11 @@ function renderCatalog() {
  ${r.susunan40 ? ` &bull; Susunan 40': <strong>${esc(r.susunan40)}</strong>` : ''}
  </div>
  ${(() => {
-  const truckList = getActualTruckBadgesForRecord(r);
-  const truckStripHtml = truckList.length > 0
-   ? `<div class="irc-lori-strip"><span class="irc-lori-lbl">&#x1F69B; Data Lori:</span>${truckList.map(t => `<span class="irc-lori-chip">${esc(t.label)}: <strong>${t.qty}</strong></span>`).join('')}</div>`
-   : '';
-  return `<div class="irc-caps">
+ const truckList = getActualTruckBadgesForRecord(r);
+ const truckStripHtml = truckList.length > 0
+ ? `<div class="irc-lori-strip"><span class="irc-lori-lbl">&#x1F69B; Data Lori:</span>${truckList.map(t => `<span class="irc-lori-chip">${esc(t.label)}: <strong>${t.qty}</strong></span>`).join('')}</div>`
+ : '';
+ return `<div class="irc-caps">
  <div>20' Container: <strong>${r.c20 !== null && r.c20 !== undefined ? estPrefix + r.c20 : '-'}</strong></div>
  <div>40' / 40'HC: <strong style="color:${c40Color};">${r.c40 !== null && r.c40 !== undefined ? estPrefix + r.c40 : '-'}</strong></div>
  ${truckStripHtml}
@@ -3659,7 +3664,7 @@ function copyCatalogItemWA(idx) {
  `20' Container: ${r.c20 != null ? prefix + r.c20 : '-'} | 40'HC: ${r.c40 != null ? prefix + r.c40 : '-'}`
  ];
  if (truckList.length > 0) {
-  lines.push(`Data Lori Sebenar: ${truckList.map(t => `${t.label} (${t.qty})`).join(' | ')}`);
+ lines.push(`Data Lori Sebenar: ${truckList.map(t => `${t.label} (${t.qty})`).join(' | ')}`);
  }
  if (isEst) lines.push(`Nota: Anggaran Est Calculator FAB (tiada bacaan sebenar lagi)`);
  if (r.gw) lines.push(`Berat GW: ${r.gw} kg`);
@@ -4053,7 +4058,7 @@ function copyLoriItemWA(idx) {
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.9)*`,
+ `*Rekod Lori Article Out (Logistics V5.12)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -4258,7 +4263,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_9',
+ app: 'Logistics_Kalkulator_Muatan_V5_12',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
