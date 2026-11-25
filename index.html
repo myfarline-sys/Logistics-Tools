@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.15 — Logistics Senawang</title>
+<title>Kalkulator Muatan & Cadangan Lori V5.16 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -301,7 +301,7 @@ body {
 }
 .btn-wa-copy:active { background: #e2e8f0; }
 
-/* V5.15 Weight Guard & SOP Banners */
+/* V5.16 Weight Guard & SOP Banners */
 .weight-guard-banner {
  margin-top: 10px;
  background: #fef2f2;
@@ -533,81 +533,116 @@ body {
 .dark-table tr:last-child td { border-bottom: none; }
 .td-bold { font-weight: 800; color: #0f172a; }
 
-/* Visual Floor Plan Box */
-.plan-box {
+/* Space & Weight Utilization Summary Box (Replaces Visual Floor Plan) */
+.space-summary-box {
  margin-top: 12px;
- background: var(--grid-bg);
+ background: #f8fafc;
+ border: 1.5px solid #cbd5e1;
  border-radius: 12px;
  padding: 12px;
- color: #fff;
+ color: #0f172a;
 }
-.plan-head {
+.ss-toggle-row {
  display: flex;
  justify-content: space-between;
- align-items: flex-start;
+ align-items: center;
  gap: 8px;
  margin-bottom: 10px;
- font-size: 11.5px;
+ flex-wrap: wrap;
 }
-.plan-title {
- color: #38bdf8;
- font-weight: 800;
- line-height: 1.35;
-}
-.plan-dims {
- color: #e2e8f0;
- font-weight: 700;
- text-align: right;
- line-height: 1.35;
-}
-.plan-toggle-row {
+.ss-switch-group {
  display: flex;
  gap: 6px;
- margin-bottom: 10px;
 }
-.plan-switch {
- background: rgba(255,255,255,0.1);
- border: 1px solid rgba(255,255,255,0.2);
- color: #cbd5e1;
- font-size: 11px;
+.ss-switch {
+ background: #e2e8f0;
+ border: 1px solid #cbd5e1;
+ color: #475569;
+ font-size: 11.5px;
  font-weight: 700;
- padding: 4px 10px;
- border-radius: 6px;
+ padding: 5px 11px;
+ border-radius: 7px;
  cursor: pointer;
 }
-.plan-switch.active {
- background: #0284c7;
- border-color: #38bdf8;
- color: #fff;
+.ss-switch.active {
+ background: #0a2540;
+ border-color: #0a2540;
+ color: #ffffff;
 }
-.floor-grid-wrap {
- border: 1px dashed rgba(56, 189, 248, 0.45);
- border-radius: 8px;
- padding: 8px;
- overflow-x: auto;
-}
-.floor-grid {
- display: grid;
- gap: 6px;
-}
-.floor-tile {
- background: var(--tile-bg);
- border: 1.5px solid var(--tile-border);
- border-radius: 7px;
- padding: 6px 4px;
- text-align: center;
- min-width: 44px;
-}
-.tile-num {
- font-size: 11.5px;
- font-weight: 800;
- color: #e0f2fe;
-}
-.tile-h {
- font-size: 10.5px;
+.ss-dims-tag {
+ font-size: 11px;
  font-weight: 700;
- color: #7dd3fc;
- margin-top: 1px;
+ color: #0369a1;
+ background: #e0f2fe;
+ padding: 3px 8px;
+ border-radius: 6px;
+}
+.ss-metric-block {
+ background: #ffffff;
+ border: 1px solid #e2e8f0;
+ border-radius: 9px;
+ padding: 9px 10px;
+ margin-bottom: 8px;
+}
+.ss-metric-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ font-size: 11.5px;
+ font-weight: 700;
+ color: #334155;
+ margin-bottom: 5px;
+}
+.ss-bar-track {
+ width: 100%;
+ height: 9px;
+ background: #e2e8f0;
+ border-radius: 999px;
+ overflow: hidden;
+}
+.ss-bar-fill {
+ height: 100%;
+ background: #0284c7;
+ border-radius: 999px;
+ transition: width 0.2s ease, background-color 0.2s ease;
+}
+.ss-bar-fill.safe { background: #16a34a; }
+.ss-bar-fill.warn { background: #f59e0b; }
+.ss-bar-fill.danger { background: #dc2626; }
+.ss-rem-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 6px;
+ margin-top: 8px;
+}
+.ss-rem-cell {
+ background: #ffffff;
+ border: 1px solid #e2e8f0;
+ border-radius: 8px;
+ padding: 7px 6px;
+ text-align: center;
+}
+.ss-rem-lbl {
+ font-size: 10px;
+ font-weight: 700;
+ color: #64748b;
+ text-transform: uppercase;
+}
+.ss-rem-val {
+ font-size: 12.5px;
+ font-weight: 800;
+ color: #0f172a;
+ margin-top: 2px;
+}
+.ss-guide-note {
+ margin-top: 8px;
+ font-size: 11.5px;
+ line-height: 1.45;
+ color: #334155;
+ background: #eff6ff;
+ border: 1px solid #bfdbfe;
+ border-radius: 8px;
+ padding: 8px 10px;
 }
 
 /* Catalog & Multi-Item Tabs Styling */
@@ -1171,7 +1206,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.15</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.16</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1391,18 +1426,53 @@ body {
  </table>
  </div>
 
- <!-- Visual Floor Plan -->
- <div class="plan-box">
- <div class="plan-toggle-row">
- <button type="button" class="plan-switch active" id="btnPlan40" onclick="switchPlanCont('40')">Pelan 40'HC</button>
- <button type="button" class="plan-switch" id="btnPlan20" onclick="switchPlanCont('20')">Pelan 20' Std</button>
+ <!-- Ringkasan Baki Ruang, % Isipadu & Had Berat -->
+ <div class="space-summary-box">
+ <div class="ss-toggle-row">
+ <div class="ss-switch-group">
+ <button type="button" class="ss-switch active" id="btnPlan40" onclick="switchPlanCont('40')">40' HC (12.00m)</button>
+ <button type="button" class="ss-switch" id="btnPlan20" onclick="switchPlanCont('20')">20' Std (6.00m)</button>
  </div>
- <div class="plan-head">
- <div class="plan-title" id="planTitle">&#x1F4D0; Pelan Susunan 40'HC<br>(Panjang &times; Lebar)</div>
- <div class="plan-dims" id="planDims">5 Baris (L) &times; 2 Lebar (W) &times;<br>3 Tingkat (H)</div>
+ <span class="ss-dims-tag" id="ssTheorySummary">5(L) &times; 2(W) &times; 3(H) = 30 unit</span>
  </div>
- <div class="floor-grid-wrap">
- <div class="floor-grid" id="floorGrid"></div>
+
+ <div class="ss-metric-block">
+ <div class="ss-metric-head">
+ <span>&#x1F4E6; Penggunaan Isipadu Ruang</span>
+ <strong id="ssVolStat">0% (0.00 / 70.86 m&sup3;)</strong>
+ </div>
+ <div class="ss-bar-track">
+ <div class="ss-bar-fill" id="ssVolBar" style="width:0%"></div>
+ </div>
+ </div>
+
+ <div class="ss-metric-block">
+ <div class="ss-metric-head">
+ <span>&#x2696; Status Had Berat (Maks 25,000 kg)</span>
+ <strong id="ssWeightStat">Masukkan GW / Unit</strong>
+ </div>
+ <div class="ss-bar-track">
+ <div class="ss-bar-fill safe" id="ssWeightBar" style="width:0%"></div>
+ </div>
+ </div>
+
+ <div class="ss-rem-grid">
+ <div class="ss-rem-cell">
+ <div class="ss-rem-lbl">Baki Panjang (L)</div>
+ <div class="ss-rem-val" id="ssRemL">-</div>
+ </div>
+ <div class="ss-rem-cell">
+ <div class="ss-rem-lbl">Baki Lebar (W)</div>
+ <div class="ss-rem-val" id="ssRemW">-</div>
+ </div>
+ <div class="ss-rem-cell">
+ <div class="ss-rem-lbl">Baki Tinggi (H)</div>
+ <div class="ss-rem-val" id="ssRemH">-</div>
+ </div>
+ </div>
+
+ <div class="ss-guide-note" id="ssLoadingGuide">
+ &#x1F4A1; Masukkan dimensi dan berat unit untuk semakan baki ruang serta panduan susunan.
  </div>
  </div>
  </div>
@@ -1657,12 +1727,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.15 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V5.16 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.15)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.16)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -1883,7 +1953,7 @@ const CUSTOM_KEY = 'solmax_v4_custom_records';
 const LAST_SYNC_KEY = 'solmax_v5_last_sync_ts';
 const APPS_SCRIPT_URL_KEY = 'solmax_v5_apps_script_url';
 
-// Had Berat Selamat (kg) V5.15
+// Had Berat Selamat (kg) V5.16
 const CONTAINER_WEIGHT_LIMIT_KG = 25000;
 const TRUCK_WEIGHT_LIMITS_KG = {
  t1: 1000,
@@ -3105,7 +3175,7 @@ function switchMainTab(tabName) {
  document.getElementById('nav-' + tabName).classList.add('active');
 }
 
-/* V5.15 Helper: SOP KE2300 & Special Arrangement Alerts */
+/* V5.16 Helper: SOP KE2300 & Special Arrangement Alerts */
 function hasKe2300Record(records) {
  return records.some(r => {
  const joined = `${str(r.article)} ${str(r.code)}`.toUpperCase();
@@ -3228,29 +3298,52 @@ function recalcSizeEstimator() {
  document.getElementById('tbl20H').textContent = f20H.toFixed(2);
  document.getElementById('tbl20Vol').textContent = `${vol.toFixed(2)} m³`;
 
- const pL = activePlanCont === '40' ? n40L : n20L;
- const pW = activePlanCont === '40' ? n40W : n20W;
- const pH = activePlanCont === '40' ? n40H : n20H;
+ const is40 = activePlanCont === '40';
+ const cSpec = is40 ? C40 : C20;
+ const pL = is40 ? n40L : n20L;
+ const pW = is40 ? n40W : n20W;
+ const pH = is40 ? n40H : n20H;
+ const theoryUnits = pL * pW * pH;
+ const contTotalVol = cSpec.L * cSpec.W * cSpec.H;
+ const usedVol = theoryUnits * vol;
+ const volPct = contTotalVol > 0 ? Math.min(100, Math.round((usedVol / contTotalVol) * 100)) : 0;
 
- document.getElementById('planTitle').innerHTML = activePlanCont === '40'
- ? `&#x1F4D0; Pelan Susunan 40'HC<br>(Panjang &times; Lebar)`
- : `&#x1F4D0; Pelan Susunan 20' Std<br>(Panjang &times; Lebar)`;
- document.getElementById('planDims').innerHTML = `${pL} Baris (L) &times; ${pW} Lebar (W) &times;<br>${pH} Tingkat (H)`;
-
- const gridEl = document.getElementById('floorGrid');
- if (pL > 0 && pW > 0 && pH > 0) {
- const cols = Math.min(pL, 12);
- const rows = Math.min(pW, 6);
- gridEl.style.gridTemplateColumns = `repeat(${cols}, minmax(44px, 1fr))`;
- let tilesHtml = '';
- const totalFootprint = cols * rows;
- for (let idx = 1; idx <= totalFootprint; idx++) {
- tilesHtml += `<div class="floor-tile"><div class="tile-num">#${idx}</div><div class="tile-h">&times;${pH}H</div></div>`;
+ const theoryEl = document.getElementById('ssTheorySummary');
+ if (theoryEl) {
+ theoryEl.innerHTML = `${pL}(L) &times; ${pW}(W) &times; ${pH}(H) = <strong>${theoryUnits} unit</strong>`;
  }
- gridEl.innerHTML = tilesHtml;
+
+ const volStatEl = document.getElementById('ssVolStat');
+ const volBarEl = document.getElementById('ssVolBar');
+ if (volStatEl && volBarEl) {
+ volStatEl.textContent = `${volPct}% (${usedVol.toFixed(2)} / ${contTotalVol.toFixed(2)} m³)`;
+ volBarEl.style.width = `${volPct}%`;
+ volBarEl.className = 'ss-bar-fill ' + (volPct >= 85 ? 'safe' : (volPct >= 60 ? '' : 'warn'));
+ }
+
+ const remLEl = document.getElementById('ssRemL');
+ const remWEl = document.getElementById('ssRemW');
+ const remHEl = document.getElementById('ssRemH');
+ const guideEl = document.getElementById('ssLoadingGuide');
+
+ if (L > 0 && W > 0 && H > 0 && pL > 0 && pW > 0 && pH > 0) {
+ const remL = Math.max(0, cSpec.L - (pL * L));
+ const remW = Math.max(0, cSpec.W - (pW * W));
+ const remH = Math.max(0, cSpec.H - (pH * H));
+ if (remLEl) remLEl.textContent = `${remL.toFixed(2)} m (${Math.round(remL * 100)} cm)`;
+ if (remWEl) remWEl.textContent = `${remW.toFixed(2)} m (${Math.round(remW * 100)} cm)`;
+ if (remHEl) remHEl.textContent = `${remH.toFixed(2)} m (${Math.round(remH * 100)} cm)`;
+
+ const tips = [];
+ if (remL >= 0.40) tips.push(`Baki ruang panjang <strong>${remL.toFixed(2)} m</strong> di pintu kontena — sesuai untuk selitan unit melintang atau pasang <em>airbag / dunnage</em>.`);
+ else tips.push(`Susunan panjang rapat (baki hanya <strong>${Math.round(remL * 100)} cm</strong>) — pastikan pintu kontena boleh ditutup rapat.`);
+ if (remW >= 0.35) tips.push(`Baki lebar <strong>${Math.round(remW * 100)} cm</strong> — gunakan kayu penyendal/pallet supaya muatan tidak beralih semasa perjalanan.`);
+ if (guideEl) guideEl.innerHTML = `&#x1F4A1; <strong>Panduan Ruang (${is40 ? "40'HC" : "20' Std"}):</strong> ${tips.join(' ')}`;
  } else {
- gridEl.style.gridTemplateColumns = '1fr';
- gridEl.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">Dimensi melebihi had ruang dalaman kontena.</div>`;
+ if (remLEl) remLEl.textContent = '-';
+ if (remWEl) remWEl.textContent = '-';
+ if (remHEl) remHEl.textContent = '-';
+ if (guideEl) guideEl.innerHTML = `&#x26A0; Dimensi unit melebihi ruang dalaman kontena ${is40 ? "40'HC" : "20' Std"}.`;
  }
 
  const tol = 0.05;
@@ -3324,6 +3417,30 @@ function recalcSizeEstimator() {
  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#64748b;padding:14px;">Tiada rekod dimensi tepat dalam Fab (Internal). Menggunakan kiraan fizikal L&times;W&times;H.</td></tr>`;
  }
 
+ const activePcsForWeight = is40 ? finalPcs40 : finalPcs20;
+ const weightStatEl = document.getElementById('ssWeightStat');
+ const weightBarEl = document.getElementById('ssWeightBar');
+ if (weightStatEl && weightBarEl) {
+ if (gwUnit && activePcsForWeight > 0) {
+ const estTotalKg = activePcsForWeight * gwUnit;
+ const wPct = Math.round((estTotalKg / CONTAINER_WEIGHT_LIMIT_KG) * 100);
+ const remKg = CONTAINER_WEIGHT_LIMIT_KG - estTotalKg;
+ weightStatEl.textContent = `${estTotalKg.toLocaleString()} kg (${wPct}%)`;
+ weightBarEl.style.width = `${Math.min(100, wPct)}%`;
+ weightBarEl.className = 'ss-bar-fill ' + (wPct > 100 ? 'danger' : (wPct >= 85 ? 'warn' : 'safe'));
+ if (guideEl && pL > 0 && pW > 0 && pH > 0) {
+ const wNote = remKg >= 0
+ ? `Baki had berat selamat: <strong>${remKg.toLocaleString()} kg</strong>.`
+ : `<span style="color:#b91c1c;font-weight:800;">Melebihi had berat selamat sebanyak +${Math.abs(remKg).toLocaleString()} kg!</span>`;
+ guideEl.innerHTML += `<br>&#x2696; <strong>Semakan Berat (${activePcsForWeight} unit):</strong> ${wNote}`;
+ }
+ } else {
+ weightStatEl.textContent = 'Isi Anggaran GW / Unit';
+ weightBarEl.style.width = '0%';
+ weightBarEl.className = 'ss-bar-fill safe';
+ }
+ }
+
  if (weightAlertEl) {
  const w40Total = gwUnit ? finalPcs40 * gwUnit : 0;
  const w20Total = gwUnit ? finalPcs20 * gwUnit : 0;
@@ -3348,7 +3465,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.15)*`,
+ `*Anggaran Muatan Kontena (Logistics V5.16)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3356,7 +3473,7 @@ function copyAnggaranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Multi-Order & Mixed Simulator (V5.15 with Lorry Support) */
+/* Multi-Order & Mixed Simulator (V5.16 with Lorry Support) */
 function getValidMultiItems() {
  return getAllCatalogRecords().filter(r =>
  (r.c40 && r.c40 > 0) ||
@@ -3694,7 +3811,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.15)*`,
+ `*Keperluan Kontena Gabungan (Logistics V5.16)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -3729,7 +3846,7 @@ function copyCampuranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Catalog Tab & V5.15 Quick Shortcut Actions */
+/* Catalog Tab & V5.16 Quick Shortcut Actions */
 function populateCatalogArticles() {
  const sel = document.getElementById('catArticleFilter');
  const arts = [...new Set(getAllCatalogRecords().map(r => r.article).filter(Boolean))].sort();
@@ -3971,7 +4088,7 @@ function copyCatalogItemWA(idx) {
  copyText(lines.join('\n'));
 }
 
-/* Lorry Search & Recommendation Tab (V5.15 with Weight Limit Guard & SOP KE2300) */
+/* Lorry Search & Recommendation Tab (V5.16 with Weight Limit Guard & SOP KE2300) */
 const TRUCK_META = [
  { key: 't1', label: 'Lori 1 Tan', rank: 1, limitKg: 1000 },
  { key: 't3', label: 'Lori 3 Tan', rank: 2, limitKg: 3000 },
@@ -4191,7 +4308,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  };
  }
 
- // V5.15: Consider both unit capacity AND truck tonnage weight limit
+ // V5.16: Consider both unit capacity AND truck tonnage weight limit
  const singleTripFit = available
  .filter(a => a.maxCap >= qty && (!totalEstKg || totalEstKg <= a.limitKg))
  .sort((a, b) => (a.rank - b.rank) || (a.maxCap - b.maxCap));
@@ -4398,7 +4515,7 @@ function copyLoriItemWA(idx) {
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.15)*`,
+ `*Rekod Lori Article Out (Logistics V5.16)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -4603,7 +4720,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_15',
+ app: 'Logistics_Kalkulator_Muatan_V5_16',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
