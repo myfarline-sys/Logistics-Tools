@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Logistics Toolbox V6.8 — Logistics Senawang</title>
+<title>Logistics Toolbox V6.9 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -1438,7 +1438,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Logistics Toolbox <span class="v-badge">V6.8</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Logistics Toolbox <span class="v-badge">V6.9</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1924,7 +1924,7 @@ body {
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (Logistics Toolbox V6.8)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (Logistics Toolbox V6.9)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -3117,32 +3117,42 @@ function parseArticleOutSheet(rows) {
 function getEffectiveContainerCap(r) {
  let c20 = (r && r.c20 && r.c20 > 0) ? r.c20 : null;
  let c40 = (r && r.c40 && r.c40 > 0) ? r.c40 : null;
- let source = (c20 || c40) ? 'Article Out' : '';
+ let gw = (r && r.gw && r.gw > 0) ? r.gw : null;
+ let source = (c20 || c40) ? (r.sheet || 'Article Out') : '';
 
- if ((!c20 || !c40) && r && Array.isArray(baseCatalogRecords)) {
+ if ((!c20 || !c40 || !gw) && r) {
  const rArtNorm = normMatchToken(r.article);
  const rCodeNorm = normMatchToken(r.code);
  const rSizeNorm = normSizeKey(r.size);
- const candidates = baseCatalogRecords
- .filter(cat => cat.sheet !== 'Article Out' && ((cat.c20 && cat.c20 > 0) || (cat.c40 && cat.c40 > 0)))
- .sort((a, b) => (a.sheet === 'Woven (Internal)' ? -1 : 1) - (b.sheet === 'Woven (Internal)' ? -1 : 1));
+ const allCat = (typeof getAllCatalogRecords === 'function') ? getAllCatalogRecords() : (Array.isArray(baseCatalogRecords) ? baseCatalogRecords : []);
+ const candidates = allCat
+ .filter(cat => cat !== r && cat.sheet !== 'Article Out' && ((cat.c20 && cat.c20 > 0) || (cat.c40 && cat.c40 > 0) || (cat.gw && cat.gw > 0)))
+ .sort((a, b) => {
+ const score = (x) => x.sheet === 'Woven (Internal)' ? 0 : (x.sheet === 'MANUAL' || x.sheet === 'Rekod App' ? 1 : 2);
+ return score(a) - score(b);
+ });
 
  for (const cat of candidates) {
  const catArtNorm = normMatchToken(cat.article);
  const catCodeNorm = normMatchToken(cat.code);
  const catSizeNorm = normSizeKey(cat.size);
  const artMatch = rArtNorm && catArtNorm && rArtNorm === catArtNorm;
- const codeMatch = rCodeNorm && catCodeNorm && rCodeNorm.length >= 4 && rCodeNorm === catCodeNorm;
+ const codeMatch = rCodeNorm && catCodeNorm && rCodeNorm.length >= 4 && (
+ rCodeNorm === catCodeNorm ||
+ rCodeNorm.startsWith(catCodeNorm) ||
+ catCodeNorm.startsWith(rCodeNorm)
+ );
  const sizeMatch = !rSizeNorm || !catSizeNorm || rSizeNorm === catSizeNorm;
- if ((artMatch && sizeMatch) || codeMatch) {
+ if ((artMatch && sizeMatch) || (codeMatch && sizeMatch)) {
  if (!c20 && cat.c20 && cat.c20 > 0) c20 = cat.c20;
  if (!c40 && cat.c40 && cat.c40 > 0) c40 = cat.c40;
+ if (!gw && cat.gw && cat.gw > 0) gw = cat.gw;
  if (!source && (c20 || c40)) source = cat.sheet;
- if (c20 && c40) break;
+ if (c20 && c40 && gw) break;
  }
  }
  }
- return { c20, c40, source };
+ return { c20, c40, gw, source };
 }
 
 function articleOutToCatalogItems(aoList) {
@@ -3712,7 +3722,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics Toolbox V6.8)*`,
+ `*Anggaran Muatan Kontena (Logistics Toolbox V6.9)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3720,13 +3730,14 @@ function copyAnggaranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Multi-Order & Mixed Simulator (V6.8 with Lorry Support) */
-function getValidMultiItems() {
- return getAllCatalogRecords().filter(r =>
- (r.c40 && r.c40 > 0) ||
- (r.c20 && r.c20 > 0) ||
- (r.trucks && Object.values(r.trucks).some(v => v && v > 0))
- );
+/* Multi-Order & Mixed Simulator (V6.9 with Cross-Sheet Container Sync) */
+function getValidMultiItems(contOnly = false) {
+ return getAllCatalogRecords().filter(r => {
+ const ec = getEffectiveContainerCap(r);
+ const hasCont = (ec.c40 && ec.c40 > 0) || (ec.c20 && ec.c20 > 0);
+ if (contOnly) return hasCont;
+ return hasCont || (r.trucks && Object.values(r.trucks).some(v => v && v > 0));
+ });
 }
 
 function getTruckCapForCatalogItem(item, truckKey) {
@@ -3783,7 +3794,8 @@ function buildFilteredOptionsHtml(validItems, filteredPairs, selectedIdx, target
  const tShort = tMeta ? tMeta.label : targetMode;
  return `${esc(item.code)}${tag} [${tShort}: ${cap ? cap + ' unit' : 'Tiada rekod'}]`;
  }
- return `${esc(item.code)}${tag} [40':${item.c40||'-'} | 20':${item.c20||'-'}]`;
+ const ec = getEffectiveContainerCap(item);
+ return `${esc(item.code)}${tag} [40':${ec.c40||'-'} | 20':${ec.c20||'-'}]`;
  };
  const hasSelectedInFiltered = filteredPairs.some(p => p.i === selectedIdx);
  let html = '';
@@ -3798,7 +3810,7 @@ function buildFilteredOptionsHtml(validItems, filteredPairs, selectedIdx, target
 }
 
 function renderGabunganRows() {
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  const qEl = document.getElementById('gabSearch');
  const q = qEl ? qEl.value : '';
  const clearBtn = document.getElementById('gabSearchClear');
@@ -3811,9 +3823,10 @@ function renderGabunganRows() {
  if (q.trim()) {
  statusEl.textContent = `Dijumpai ${filtered.length} daripada ${validItems.length} item (klik untuk tambah terus):`;
  if (filtered.length > 0) {
- picksEl.innerHTML = filtered.slice(0, 8).map(({ it, i }) =>
- `<button type="button" class="qs-pick-btn" onclick="quickPickGabungan(${i})">+ ${esc(it.code)} <span style="opacity:0.8;">[40':${it.c40||'-'} | 20':${it.c20||'-'}]</span></button>`
- ).join('') + (filtered.length > 8 ? `<span style="font-size:11px;color:#64748b;align-self:center;padding-left:4px;">+${filtered.length - 8} lagi dalam senarai...</span>` : '');
+ picksEl.innerHTML = filtered.slice(0, 8).map(({ it, i }) => {
+ const ec = getEffectiveContainerCap(it);
+ return `<button type="button" class="qs-pick-btn" onclick="quickPickGabungan(${i})">+ ${esc(it.code)} <span style="opacity:0.8;">[40':${ec.c40||'-'} | 20':${ec.c20||'-'}]</span></button>`;
+ }).join('') + (filtered.length > 8 ? `<span style="font-size:11px;color:#64748b;align-self:center;padding-left:4px;">+${filtered.length - 8} lagi dalam senarai...</span>` : '');
  } else {
  picksEl.innerHTML = `<span style="font-size:11.5px;color:#b91c1c;">Tiada item sepadan dengan "${esc(q.trim())}".</span>`;
  }
@@ -3839,7 +3852,7 @@ function renderGabunganRows() {
 }
 
 function quickPickGabungan(itemIdx) {
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  const it = validItems[itemIdx];
  if (!it) return;
  if (gabunganList.length >= 5) {
@@ -3873,8 +3886,9 @@ function renderCampuranRows() {
  statusEl.textContent = `Dijumpai ${filtered.length} daripada ${validItems.length} item (klik untuk tambah terus):`;
  if (filtered.length > 0) {
  picksEl.innerHTML = filtered.slice(0, 8).map(({ it, i }) => {
+ const ec = targetMode === 'CONT' ? getEffectiveContainerCap(it) : null;
  const capInfo = targetMode === 'CONT'
- ? `[40':${it.c40||'-'} | 20':${it.c20||'-'}]`
+ ? `[40':${ec.c40||'-'} | 20':${ec.c20||'-'}]`
  : `[Kapasiti: ${getTruckCapForCatalogItem(it, targetMode) || '-'}]`;
  return `<button type="button" class="qs-pick-btn" onclick="quickPickCampuran(${i})">+ ${esc(it.code)} <span style="opacity:0.8;">${capInfo}</span></button>`;
  }).join('') + (filtered.length > 8 ? `<span style="font-size:11px;color:#64748b;align-self:center;padding-left:4px;">+${filtered.length - 8} lagi dalam senarai...</span>` : '');
@@ -3927,7 +3941,7 @@ function renderMultiBuilders() {
 
 function addGabunganRow() {
  if (gabunganList.length >= 5) { showToast('Maksimum 5 baris item.'); return; }
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  const q = document.getElementById('gabSearch') ? document.getElementById('gabSearch').value : '';
  const filtered = filterValidMultiItems(validItems, q);
  const defaultIdx = filtered.length > 0 ? filtered[0].i : 0;
@@ -3946,16 +3960,18 @@ function addCampuranRow() {
 }
 
 function recalcGabungan() {
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  let sum40 = 0, sum20 = 0, totalKg = 0;
  const activeItems = [];
  gabunganList.forEach(row => {
  const it = validItems[row.idx];
  if (!it || !row.qty) return;
  activeItems.push(it);
- if (it.c40 > 0) sum40 += row.qty / it.c40;
- if (it.c20 > 0) sum20 += row.qty / it.c20;
- if (it.gw) totalKg += row.qty * it.gw;
+ const ec = getEffectiveContainerCap(it);
+ if (ec.c40 > 0) sum40 += row.qty / ec.c40;
+ if (ec.c20 > 0) sum20 += row.qty / ec.c20;
+ const unitGw = it.gw || ec.gw;
+ if (unitGw) totalKg += row.qty * unitGw;
  });
  document.getElementById('gab40Cont').innerHTML = `${sum40.toFixed(2)} <span>kontena</span>`;
  document.getElementById('gab40Detail').innerHTML = `Jumlah Ruang: <strong>${Math.round(sum40 * 100)}%</strong><br>Anggaran Berat: <strong>${totalKg ? totalKg.toLocaleString() + ' kg' : '-'}</strong>`;
@@ -3995,9 +4011,10 @@ function recalcCampuran() {
  const it = validItems[row.idx];
  if (!it || !row.qty) return;
  activeItems.push(it);
+ const ec = getEffectiveContainerCap(it);
  let cap = null;
- if (cont === '40') cap = it.c40;
- else if (cont === '20') cap = it.c20;
+ if (cont === '40') cap = ec.c40;
+ else if (cont === '20') cap = ec.c20;
  else cap = getTruckCapForCatalogItem(it, cont);
 
  if (cap && cap > 0) {
@@ -4006,7 +4023,8 @@ function recalcCampuran() {
  missingTruckData++;
  }
  units += row.qty;
- if (it.gw) kg += row.qty * it.gw;
+ const unitGw = it.gw || ec.gw;
+ if (unitGw) kg += row.qty * unitGw;
  });
 
  const pct = Math.round(ratio * 100);
@@ -4043,7 +4061,7 @@ function recalcCampuran() {
 }
 
 function copyGabunganWA() {
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  const itemLines = gabunganList
  .map(row => {
  const it = validItems[row.idx];
@@ -4058,7 +4076,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics Toolbox V6.8)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.9)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -4164,7 +4182,7 @@ function getActualTruckBadgesForRecord(r) {
 function sendCatalogItemToGabungan(idx) {
  const r = renderedCatalogSlice[idx];
  if (!r) return;
- const validItems = getValidMultiItems();
+ const validItems = getValidMultiItems(true);
  const targetIdx = validItems.findIndex(v =>
  v.code === r.code && v.article === r.article && v.size === r.size && v.sheet === r.sheet
  );
@@ -4823,7 +4841,7 @@ function copyLoriItemWA(idx) {
  if (ec.c20) contParts.push(`Kontena - 20': ${ec.c20} unit`);
  if (ec.c40) contParts.push(`Kontena - 40'HC: ${ec.c40} unit`);
  const lines = [
- `*Rekod Lori & Kontena Article Out (Logistics Toolbox V6.8)*`,
+ `*Rekod Lori & Kontena Article Out (Logistics Toolbox V6.9)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -5039,7 +5057,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Toolbox_V6_8',
+ app: 'Logistics_Toolbox_V6_9',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
@@ -5303,7 +5321,7 @@ function quickAskInline(presetKey) {
  } else if (presetKey === 'space') {
  inlineEl.innerHTML = `&#x1F4D0; Baki ${snap.contLabel}: <strong>L ${snap.remL}</strong> &bull; <strong>W ${snap.remW}</strong> &bull; <strong>H ${snap.remH}</strong>.`;
  } else if (presetKey === 'wa') {
- const waTxt = `*Muatan V6.8* ${snap.L}x${snap.W}x${snap.H}m | 40'HC: ${snap.pcs40} | 20': ${snap.pcs20}`;
+ const waTxt = `*Muatan V6.9* ${snap.L}x${snap.W}x${snap.H}m | 40'HC: ${snap.pcs40} | 20': ${snap.pcs20}`;
  copyText(waTxt);
  inlineEl.innerHTML = `&#x1F4CB; Draf WA disalin: <strong>${esc(waTxt)}</strong>`;
  }
@@ -5378,7 +5396,7 @@ function buildLocalAiReply(modeOrQuestion) {
  let plainLines = [];
  if (snap.activeTab === 'anggaran') {
  plainLines = [
- `*Semakan Muatan (${snap.contLabel} - V6.8)*`,
+ `*Semakan Muatan (${snap.contLabel} - V6.9)*`,
  `Saiz: ${snap.L}m x ${snap.W}m x ${snap.H}m`,
  `Kapasiti: 40'HC (${snap.pcs40}) | 20' (${snap.pcs20})`,
  `Baki Ruang (${snap.contLabel}): L ${snap.remL} | W ${snap.remW} | H ${snap.remH}`,
@@ -5386,21 +5404,21 @@ function buildLocalAiReply(modeOrQuestion) {
  ];
  } else if (snap.activeTab === 'gabungan') {
  plainLines = [
- `*Keperluan Kontena Gabungan (Logistics Toolbox V6.8)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.9)*`,
  `Keperluan 40'HC: ${snap.c40}`,
  `Keperluan 20' Std: ${snap.c20}`,
  `Nota Tambahan: ${snap.detail}`
  ];
  } else if (snap.activeTab === 'campuran') {
  plainLines = [
- `*Simulasi Muatan Campuran (Logistics Toolbox V6.8)*`,
+ `*Simulasi Muatan Campuran (Logistics Toolbox V6.9)*`,
  `Ruang Terpakai: ${snap.pct}`,
  `Jumlah Unit: ${snap.units}`,
  `Berat: ${snap.weight}`
  ];
  } else if (snap.activeTab === 'lori') {
  plainLines = [
- `*Cadangan Lori (Logistics Toolbox V6.8)*`,
+ `*Cadangan Lori (Logistics Toolbox V6.9)*`,
  `Article: ${snap.art || '-'}`,
  `Saiz: ${snap.size || '-'}`,
  `Kuantiti: ${snap.qty || '-'} unit`,
