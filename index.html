@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.39 — Logistics Senawang</title>
+<title>Logistics Toolbox V6.7 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -37,7 +37,7 @@ body {
  padding-bottom: 82px;
 }
 
-/* V5.39 Global AI Floating Button */
+/* V6.7 Global AI Floating Button */
 .ai-fab {
  position: fixed;
  bottom: 100px;
@@ -324,7 +324,7 @@ body {
 .btn-wa-copy:active { background: #d1fae5; }
 .btn-wa-copy:active { background: #e2e8f0; }
 
-/* V5.39 Weight Guard & SOP Banners */
+/* V6.7 Weight Guard & SOP Banners */
 .weight-guard-banner {
  margin-top: 10px;
  background: #fef2f2;
@@ -633,7 +633,7 @@ body {
  margin-top: 1px;
 }
 
-/* V5.39 Inline AI Quick Ask Card (Refined Mobile Spacing) */
+/* V6.7 Inline AI Quick Ask Card (Refined Mobile Spacing) */
 .ai-inline-card {
  margin-top: 14px;
  background: #f8fafc;
@@ -1323,6 +1323,27 @@ body {
  color: #64748b;
  font-weight: 600;
 }
+.container-badge {
+ background: #f0fdfa;
+ border: 1px solid #5eead4;
+ color: #0f766e;
+ border-radius: 8px;
+ padding: 5px 9px;
+ font-size: 11.5px;
+ font-weight: 700;
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+}
+.container-badge strong {
+ color: #115e59;
+ font-weight: 800;
+}
+.container-badge.ref-woven {
+ background: #ecfeff;
+ border-color: #67e8f9;
+ color: #0e7490;
+}
 
 /* Bottom Navigation Bar */
 .bottom-nav {
@@ -1417,7 +1438,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.39</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Logistics Toolbox <span class="v-badge">V6.7</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1782,7 +1803,7 @@ body {
  PENTING : Pastikan panjang setiap Lori bersesuaian dengan Item/Grade/Article
  </div>
  <div style="font-size:12px;color:#475569;margin-bottom:10px;">
- Pilih <strong>Article</strong>, <strong>Saiz</strong> (cth: 5.0m x 100m / 140m / 160m) dan masukkan <strong>Kuantiti</strong> untuk mendapatkan <strong>jenis lori cadangan paling sesuai</strong> serta semakan had tan.
+ Pilih <strong>Article</strong>, <strong>Saiz</strong> (cth: 5.0m x 100m / 140m / 160m) dan masukkan <strong>Kuantiti</strong> untuk mendapatkan <strong>jenis lori cadangan paling sesuai</strong>, rujukan kapasiti <strong>Kontena 20' &amp; 40'HC</strong>, serta semakan had tan.
  </div>
 
  <input type="text" id="loriSearch" class="search-input-box" placeholder="&#x1F50D; Cari Article, Item Code, Saiz atau Note (cth: PET400/50, SFM1000G, KE2300)..." oninput="onLoriSearchInput()">
@@ -1808,15 +1829,21 @@ body {
  <input type="number" id="loriQtyInput" class="lori-qty-input" min="1" step="1" placeholder="cth: 15" oninput="renderLoriSearch()">
  </div>
  <div>
- <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px;">Tapis Jenis Lori</label>
+ <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px;">Tapis Lori / Kontena</label>
  <select id="loriTruckFilter" class="cat-select" style="font-size:12px;padding:9px 8px;" onchange="renderLoriSearch()">
- <option value="ALL">Semua Lori / Treler</option>
+ <option value="ALL">Semua Lori &amp; Kontena</option>
+ <optgroup label="Lori &amp; Treler">
  <option value="t1">Lori 1 Tan (1,000 kg)</option>
  <option value="t3">Lori 3 Tan (3,000 kg)</option>
  <option value="t5">Lori 5 Tan (5,000 kg)</option>
  <option value="t10">Lori 10 Tan (10,000 kg)</option>
  <option value="tr20">Lori 30' / Treler 20' (15,000 kg)</option>
  <option value="tr40">Treler 40' (24,000 kg)</option>
+ </optgroup>
+ <optgroup label="Kontena (Container)">
+ <option value="c20">Kontena - 20' (25,000 kg)</option>
+ <option value="c40">Kontena - 40'HC (25,000 kg)</option>
+ </optgroup>
  </select>
  </div>
  <button type="button" class="btn-sm-card" style="padding:9px 10px;white-space:nowrap;height:38px;" onclick="resetLoriFilters()">Reset</button>
@@ -1863,7 +1890,7 @@ body {
  </button>
 </nav>
 
-<!-- V5.39 Global AI Floating Button -->
+<!-- V6.7 Global AI Floating Button -->
 <div class="ai-fab" onclick="openAiQuickDrawer()" title="Tanya AI">✨</div>
 
 <!-- MODAL: GOOGLE APPS SCRIPT 2-WAY SYNC & PUSH -->
@@ -1892,12 +1919,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.39 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V6.7 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.39)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (Logistics Toolbox V6.7)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -1926,7 +1953,8 @@ function doPost(e) {
  r.update || '', r.article || '', r.code || '', r.size || '',
  r.gw || '', totWt,
  r.t1 || '', r.t3 || '', r.t5 || '', r.t10 || '', r.tr20 || '', r.tr40 || '',
- r.packing || ''
+ r.packing || '',
+ r.c20 || '', r.c40 || ''
  ]);
  countAo++;
  }
@@ -2033,6 +2061,16 @@ function doPost(e) {
  <input type="number" step="1" id="cmTr40" class="form-input" placeholder="0">
  </div>
  </div>
+ <div class="form-grid-2">
+ <div class="form-group">
+ <label>Kontena - 20' (Pilihan)</label>
+ <input type="number" step="1" id="cmAoC20" class="form-input" placeholder="cth: 30">
+ </div>
+ <div class="form-group">
+ <label>Kontena - 40'HC (Pilihan)</label>
+ <input type="number" step="1" id="cmAoC40" class="form-input" placeholder="cth: 60">
+ </div>
+ </div>
  </div>
 
  <div class="form-grid-2">
@@ -2106,7 +2144,7 @@ function doPost(e) {
  </div>
 </div>
 
-<!-- V5.39 AI QUICK ASK DRAWER -->
+<!-- V6.7 AI QUICK ASK DRAWER -->
 <div class="ai-drawer-backdrop" id="aiQuickDrawer" onclick="if(event.target===this) closeAiQuickDrawer()">
  <div class="ai-drawer-sheet">
  <div class="ai-drawer-handle"></div>
@@ -2117,7 +2155,7 @@ function doPost(e) {
 
  
 
- <div class="ai-chat-log" id="aiQuickChatLog">
+<div class="ai-chat-log" id="aiQuickChatLog">
  <div class="ai-msg-bot">Sedia membantu! Pilih butang pantas di atas atau tanya mengenai baki ruang, had berat kontena, atau draf laporan untuk dimensi semasa.</div>
  </div>
 
@@ -2165,7 +2203,7 @@ const CUSTOM_KEY = 'solmax_v4_custom_records';
 const LAST_SYNC_KEY = 'solmax_v5_last_sync_ts';
 const APPS_SCRIPT_URL_KEY = 'solmax_v5_apps_script_url';
 
-// Had Berat Selamat (kg) V5.39
+// Had Berat Selamat (kg) V6.7
 const CONTAINER_WEIGHT_LIMIT_KG = 25000;
 const TRUCK_WEIGHT_LIMITS_KG = {
  t1: 1000,
@@ -2234,6 +2272,8 @@ const SEED_ARTICLE_OUT = [
  gw: 372,
  totalWeight: 7440,
  trucks: { t1: null, t3: null, t5: 20, t10: null, tr20: null, tr40: null },
+ c20: 30,
+ c40: 60,
  loadingTime: '30/10/2026',
  note: 'Single'
  },
@@ -2984,7 +3024,8 @@ function parseArticleOutSheet(rows) {
  let hIdx = 2;
  let col = {
  loadingTime: 0, article: 1, code: 2, size: 3, gw: 4, totalWeight: 5,
- t1: 6, t3: 7, t5: 8, t10: 9, tr20: 10, tr40: 11, note: 12
+ t1: 6, t3: 7, t5: 8, t10: 9, tr20: 10, tr40: 11, note: 12,
+ c20: -1, c40: -1
  };
 
  for (let i = 0; i < Math.min(rows.length, 8); i++) {
@@ -3002,8 +3043,12 @@ function parseArticleOutSheet(rows) {
  else if (h.includes('3 tan')) col.t3 = idx;
  else if (h.includes('5 tan')) col.t5 = idx;
  else if (h.includes('10 tan')) col.t10 = idx;
- else if (h.includes("20'") || h.includes('20ft') || h.includes("30'")) col.tr20 = idx;
- else if (h.includes("40'") || h.includes('treler')) col.tr40 = idx;
+ else if (h.includes('kontena') || h.includes('container')) {
+ if (h.includes("20'") || h.includes('20ft') || h.includes('20')) col.c20 = idx;
+ else if (h.includes("40'") || h.includes('40hc') || h.includes('40')) col.c40 = idx;
+ }
+ else if (h.includes("30'") || ((h.includes('lori') || h.includes('treler')) && (h.includes("20'") || h.includes('20ft')))) col.tr20 = idx;
+ else if (h.includes('treler') || (h.includes('lori') && h.includes("40'"))) col.tr40 = idx;
  else if (h.includes('note')) col.note = idx;
  });
  break;
@@ -3048,6 +3093,11 @@ function parseArticleOutSheet(rows) {
  }
  });
 
+ const rawC20 = (col.c20 !== -1) ? num(r[col.c20]) : null;
+ const rawC40 = (col.c40 !== -1) ? num(r[col.c40]) : null;
+ const c20 = (rawC20 !== null && rawC20 > 0) ? rawC20 : null;
+ const c40 = (rawC40 !== null && rawC40 > 0) ? rawC40 : null;
+
  out.push({
  article: art || code.split(' ')[0],
  code: code || art,
@@ -3055,11 +3105,44 @@ function parseArticleOutSheet(rows) {
  gw,
  totalWeight,
  trucks,
+ c20,
+ c40,
  loadingTime,
  note
  });
  }
  return out;
+}
+
+function getEffectiveContainerCap(r) {
+ let c20 = (r && r.c20 && r.c20 > 0) ? r.c20 : null;
+ let c40 = (r && r.c40 && r.c40 > 0) ? r.c40 : null;
+ let source = (c20 || c40) ? 'Article Out' : '';
+
+ if ((!c20 || !c40) && r && Array.isArray(baseCatalogRecords)) {
+ const rArtNorm = normMatchToken(r.article);
+ const rCodeNorm = normMatchToken(r.code);
+ const rSizeNorm = normSizeKey(r.size);
+ const candidates = baseCatalogRecords
+ .filter(cat => cat.sheet !== 'Article Out' && ((cat.c20 && cat.c20 > 0) || (cat.c40 && cat.c40 > 0)))
+ .sort((a, b) => (a.sheet === 'Woven (Internal)' ? -1 : 1) - (b.sheet === 'Woven (Internal)' ? -1 : 1));
+
+ for (const cat of candidates) {
+ const catArtNorm = normMatchToken(cat.article);
+ const catCodeNorm = normMatchToken(cat.code);
+ const catSizeNorm = normSizeKey(cat.size);
+ const artMatch = rArtNorm && catArtNorm && rArtNorm === catArtNorm;
+ const codeMatch = rCodeNorm && catCodeNorm && rCodeNorm.length >= 4 && rCodeNorm === catCodeNorm;
+ const sizeMatch = !rSizeNorm || !catSizeNorm || rSizeNorm === catSizeNorm;
+ if ((artMatch && sizeMatch) || codeMatch) {
+ if (!c20 && cat.c20 && cat.c20 > 0) c20 = cat.c20;
+ if (!c40 && cat.c40 && cat.c40 > 0) c40 = cat.c40;
+ if (!source && (c20 || c40)) source = cat.sheet;
+ if (c20 && c40) break;
+ }
+ }
+ }
+ return { c20, c40, source };
 }
 
 function articleOutToCatalogItems(aoList) {
@@ -3073,8 +3156,8 @@ function articleOutToCatalogItems(aoList) {
  width: d.w,
  length: d.l,
  gw: r.gw,
- c20: r.trucks.tr20 || null,
- c40: r.trucks.tr40 || null,
+ c20: (r.c20 && r.c20 > 0) ? r.c20 : null,
+ c40: (r.c40 && r.c40 > 0) ? r.c40 : null,
  trucks: r.trucks,
  packing: r.note || '',
  update: r.loadingTime || '-'
@@ -3387,7 +3470,7 @@ function switchMainTab(tabName) {
  document.getElementById('nav-' + tabName).classList.add('active');
 }
 
-/* V5.39 Helper: SOP KE2300 & Special Arrangement Alerts */
+/* V6.7 Helper: SOP KE2300 & Special Arrangement Alerts */
 function hasKe2300Record(records) {
  return records.some(r => {
  const joined = `${str(r.article)} ${str(r.code)}`.toUpperCase();
@@ -3629,7 +3712,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.39)*`,
+ `*Anggaran Muatan Kontena (Logistics Toolbox V6.7)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3637,7 +3720,7 @@ function copyAnggaranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Multi-Order & Mixed Simulator (V5.39 with Lorry Support) */
+/* Multi-Order & Mixed Simulator (V6.7 with Lorry Support) */
 function getValidMultiItems() {
  return getAllCatalogRecords().filter(r =>
  (r.c40 && r.c40 > 0) ||
@@ -3975,7 +4058,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.39)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.7)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -4010,7 +4093,7 @@ function copyCampuranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Catalog Tab & V5.39 Quick Shortcut Actions */
+/* Catalog Tab & V6.7 Quick Shortcut Actions */
 function populateCatalogArticles() {
  const sel = document.getElementById('catArticleFilter');
  const arts = [...new Set(getAllCatalogRecords().map(r => r.article).filter(Boolean))].sort();
@@ -4252,7 +4335,7 @@ function copyCatalogItemWA(idx) {
  copyText(lines.join('\n'));
 }
 
-/* Lorry Search & Recommendation Tab (V5.39 with Weight Limit Guard & SOP KE2300) */
+/* Lorry Search & Recommendation Tab (V6.7 with Weight Limit Guard & SOP KE2300) */
 const TRUCK_META = [
  { key: 't1', label: 'Lori 1 Tan', rank: 1, limitKg: 1000 },
  { key: 't3', label: 'Lori 3 Tan', rank: 2, limitKg: 3000 },
@@ -4424,14 +4507,41 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  alertHtml = `<div class="sop-ke2300-banner">&#x26A0; <strong>SOP KHUSUS KE2300:</strong> Wajib guna <strong>Forklift Pipe Attachment (3.8m)</strong> &amp; rekod dalam <em>Interim Roll Loading Safety Log 2026/2027</em>.</div>`;
  }
 
+ // Collect Kontena - 20' and Kontena - 40'HC reference capacities for these rows
+ let maxCont20 = 0, maxCont40 = 0, contSourceLabel = '';
+ rows.forEach(r => {
+ const ec = getEffectiveContainerCap(r);
+ if (ec.c20 && ec.c20 > maxCont20) {
+ maxCont20 = ec.c20;
+ if (!contSourceLabel && ec.source) contSourceLabel = ec.source;
+ }
+ if (ec.c40 && ec.c40 > maxCont40) {
+ maxCont40 = ec.c40;
+ if (!contSourceLabel && ec.source) contSourceLabel = ec.source;
+ }
+ });
+ const contInfo = (maxCont20 > 0 || maxCont40 > 0)
+ ? { c20: maxCont20 || null, c40: maxCont40 || null, source: contSourceLabel }
+ : null;
+
  if (truckFilter !== 'ALL' && totalEstKg) {
+ if (truckFilter === 'c20' || truckFilter === 'c40') {
+ const cLabel = truckFilter === 'c20' ? "Kontena - 20'" : "Kontena - 40'HC";
+ if (totalEstKg > CONTAINER_WEIGHT_LIMIT_KG) {
+ alertHtml += buildWeightAlertHtml(totalEstKg, CONTAINER_WEIGHT_LIMIT_KG, cLabel);
+ }
+ } else {
  const selectedTruckMeta = TRUCK_META.find(t => t.key === truckFilter);
  if (selectedTruckMeta && totalEstKg > selectedTruckMeta.limitKg) {
  alertHtml += buildWeightAlertHtml(totalEstKg, selectedTruckMeta.limitKg, selectedTruckMeta.label);
  }
  }
+ }
 
  if (available.length === 0) {
+ const contWaLines = contInfo
+ ? [`Kontena: ${contInfo.c20 ? "20' (" + contInfo.c20 + " unit)" : '-'}${contInfo.c40 ? " | 40'HC (" + contInfo.c40 + " unit)" : ''}`]
+ : [];
  return {
  status: 'NO_DATA',
  headline: `Tiada rekod kapasiti lori untuk ${labelTitle}`,
@@ -4440,8 +4550,9 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  : 'Sila kemas kini kuantiti muatan dalam tab Article Out Google Sheets atau pilih Saiz.',
  bestKey: null,
  available: [],
+ contInfo,
  alertHtml,
- waText: `*Cadangan Lori (${labelTitle})*\nTiada rekod kuantiti lori ditemui dalam sheet Article Out untuk saiz ini.`
+ waText: [`*Cadangan Lori (${labelTitle})*`, 'Tiada rekod kuantiti lori ditemui dalam sheet Article Out untuk saiz ini.', ...contWaLines].join('\n')
  };
  }
 
@@ -4461,6 +4572,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  subline: `Masukkan <strong>Kuantiti</strong> di atas untuk padanan tepat. Rekod saiz ini: ${listSummary}.${dateBadgeText}${sizePromptNote}`,
  bestKey: top.key,
  available,
+ contInfo,
  alertHtml,
  waText: [
  `*Cadangan Lori (Article Out)*`,
@@ -4472,7 +4584,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  };
  }
 
- // V5.39: Consider both unit capacity AND truck tonnage weight limit
+ // V6.7: Consider both unit capacity AND truck tonnage weight limit
  const singleTripFit = available
  .filter(a => a.maxCap >= qty && (!totalEstKg || totalEstKg <= a.limitKg))
  .sort((a, b) => (a.rank - b.rank) || (a.maxCap - b.maxCap));
@@ -4486,6 +4598,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  subline: `Kuantiti <strong>${qty} unit</strong>${selectedSize ? ` (${esc(selectedSize)})` : ''} muat dalam <strong>${best.label}</strong> (kapasiti data sehingga <strong>${best.maxCap} unit</strong> • ${utilPct}% ruang • had tan ${best.limitKg.toLocaleString()} kg)${weightNote}${dateBadgeText}.${sizePromptNote}`,
  bestKey: best.key,
  available,
+ contInfo,
  alertHtml,
  waText: [
  `*Cadangan Lori (Article Out)*`,
@@ -4513,6 +4626,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  subline: `Kuantiti <strong>${qty} unit</strong>${selectedSize ? ` (${esc(selectedSize)})` : ''} melebihi had 1 trip (${largest.maxCap} unit / had ${largest.limitKg.toLocaleString()} kg bagi ${largest.label}). Cadangan: <strong>${tripsNeeded} &times; ${largest.label}</strong>${weightNote}${dateBadgeText}.${sizePromptNote}`,
  bestKey: largest.key,
  available,
+ contInfo,
  alertHtml,
  waText: [
  `*Cadangan Lori (Article Out)*`,
@@ -4550,13 +4664,21 @@ function renderLoriSearch() {
  const list = articleOutRecords.filter(r => {
  if (selectedArt && r.article !== selectedArt) return false;
  if (selectedSize && normSizeKey(r.size) !== normSizeKey(selectedSize)) return false;
+ const ec = getEffectiveContainerCap(r);
  if (truckFilter !== 'ALL') {
+ if (truckFilter === 'c20') {
+ if (!ec.c20 || ec.c20 <= 0) return false;
+ } else if (truckFilter === 'c40') {
+ if (!ec.c40 || ec.c40 <= 0) return false;
+ } else {
  const val = r.trucks ? r.trucks[truckFilter] : null;
  if (!val || val <= 0) return false;
  }
+ }
  if (tokens.length) {
  const truckText = TRUCK_META.filter(tm => r.trucks && r.trucks[tm.key]).map(tm => tm.label).join(' ');
- const hay = [r.article, r.code, r.size, r.note, r.loadingTime, truckText].filter(Boolean).join(' ').toLowerCase();
+ const contText = [ec.c20 ? "kontena 20'" : '', ec.c40 ? "kontena 40'hc" : ''].filter(Boolean).join(' ');
+ const hay = [r.article, r.code, r.size, r.note, r.loadingTime, truckText, contText].filter(Boolean).join(' ').toLowerCase();
  for (const t of tokens) if (!hay.includes(t)) return false;
  }
  return true;
@@ -4584,17 +4706,26 @@ function renderLoriSearch() {
  if (recAlerts) recAlerts.innerHTML = rec.alertHtml || '';
  lastLoriRecText = rec.waText;
 
+ let recHtmlParts = [];
  if (rec.available.length > 0) {
- recPills.innerHTML = rec.available.map(st => {
+ recHtmlParts.push(rec.available.map(st => {
  const isBest = st.key === rec.bestKey;
  const isUnder = qtyVal && qtyVal > 0 && st.maxCap < qtyVal && !isBest;
  const cls = isBest ? 'lorry-badge best-pick' : (isUnder ? 'lorry-badge under-cap' : 'lorry-badge');
  const prefix = isBest ? '&#x2B50; ' : '&#x1F69B; ';
  return `<span class="${cls}">${prefix}${esc(st.label)}: <strong>Maks ${st.maxCap} unit</strong></span>`;
- }).join('');
+ }).join(''));
  } else {
- recPills.innerHTML = `<span class="lorry-badge empty-lorry">Tiada rekod kuantiti lori direkodkan untuk saiz ini</span>`;
+ recHtmlParts.push(`<span class="lorry-badge empty-lorry">Tiada rekod kuantiti lori direkodkan untuk saiz ini</span>`);
  }
+ if (rec.contInfo && (rec.contInfo.c20 || rec.contInfo.c40)) {
+ const srcTag = rec.contInfo.source && rec.contInfo.source !== 'Article Out' ? ` (${esc(rec.contInfo.source)})` : '';
+ const cPills = [];
+ if (rec.contInfo.c20) cPills.push(`<span class="container-badge${srcTag ? ' ref-woven' : ''}">&#x1F4E6; Kontena - 20': <strong>${rec.contInfo.c20} unit</strong>${srcTag}</span>`);
+ if (rec.contInfo.c40) cPills.push(`<span class="container-badge${srcTag ? ' ref-woven' : ''}">&#x1F4E6; Kontena - 40'HC: <strong>${rec.contInfo.c40} unit</strong>${srcTag}</span>`);
+ recHtmlParts.push(cPills.join(''));
+ }
+ recPills.innerHTML = recHtmlParts.join('');
  } else if (qtyVal && qtyVal > 0 && !selectedArt && distinctArts.length > 1) {
  recBox.style.display = 'block';
  recBox.classList.add('warn');
@@ -4619,10 +4750,18 @@ function renderLoriSearch() {
  renderedLoriSlice = list.slice(0, 150);
  container.innerHTML = renderedLoriSlice.map((r, idx) => {
  const usedTrucks = TRUCK_META.filter(tm => r.trucks && r.trucks[tm.key] > 0);
+ const ec = getEffectiveContainerCap(r);
  const isKe2300 = `${str(r.article)} ${str(r.code)}`.toUpperCase().includes('KE2300');
- const pillsHtml = usedTrucks.length > 0
+ const truckPillsHtml = usedTrucks.length > 0
  ? usedTrucks.map(tm => `<span class="lorry-badge">&#x1F69B; ${esc(tm.label)}: <strong>${r.trucks[tm.key]}</strong></span>`).join('')
  : `<span class="lorry-badge empty-lorry">Tiada data kapasiti lori</span>`;
+ const srcNote = ec.source && ec.source !== 'Article Out' ? ` <span style="font-weight:600;opacity:0.85;">(${esc(ec.source)})</span>` : '';
+ const contPills = [];
+ if (ec.c20) contPills.push(`<span class="container-badge${srcNote ? ' ref-woven' : ''}">&#x1F4E6; Kontena - 20': <strong>${ec.c20}</strong>${srcNote}</span>`);
+ if (ec.c40) contPills.push(`<span class="container-badge${srcNote ? ' ref-woven' : ''}">&#x1F4E6; Kontena - 40'HC: <strong>${ec.c40}</strong>${srcNote}</span>`);
+ const contPillsHtml = contPills.length > 0
+ ? `<div class="lorry-pill-grid" style="margin-top:6px;padding-top:6px;border-top:1px dashed #e2e8f0;">${contPills.join('')}</div>`
+ : '';
 
  return `
  <div class="item-result-card">
@@ -4635,7 +4774,8 @@ function renderLoriSearch() {
  ${r.gw ? ` &bull; GW: <strong>${r.gw} kg</strong>` : ''}
  ${r.totalWeight ? ` &bull; Jumlah Berat: <strong>${r.totalWeight.toLocaleString()} kg</strong>` : ''}
  </div>
- <div class="lorry-pill-grid">${pillsHtml}</div>
+ <div class="lorry-pill-grid">${truckPillsHtml}</div>
+ ${contPillsHtml}
  ${isKe2300 ? `<div class="sop-ke2300-banner" style="margin-top:7px;padding:7px 9px;font-size:11px;">&#x26A0; <strong>SOP KHUSUS KE2300:</strong> Wajib guna Forklift Pipe Attachment (3.8m) &amp; rekod dalam Interim Roll Loading Safety Log 2026/2027.</div>` : ''}
  <div class="irc-actions">
  <div class="irc-date">&#x1F69A; Loading: <strong>${esc(r.loadingTime || '-')}</strong></div>
@@ -4678,12 +4818,17 @@ function copyLoriItemWA(idx) {
  const usedTrucks = TRUCK_META
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
+ const ec = getEffectiveContainerCap(r);
+ const contParts = [];
+ if (ec.c20) contParts.push(`Kontena - 20': ${ec.c20} unit`);
+ if (ec.c40) contParts.push(`Kontena - 40'HC: ${ec.c40} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.39)*`,
+ `*Rekod Lori & Kontena Article Out (Logistics Toolbox V6.7)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
  ];
+ if (contParts.length) lines.push(`Kapasiti Kontena: ${contParts.join(' | ')}`);
  if (r.gw) lines.push(`Berat GW/Unit: ${r.gw} kg`);
  if (r.totalWeight) lines.push(`Total Weight: ${r.totalWeight.toLocaleString()} kg`);
  if (r.note) lines.push(`Note: ${r.note}`);
@@ -4718,6 +4863,8 @@ function openCustomModal(editId = '') {
  document.getElementById('cmT10').value = rec.t10 ?? '';
  document.getElementById('cmTr20').value = rec.tr20 ?? '';
  document.getElementById('cmTr40').value = rec.tr40 ?? '';
+ document.getElementById('cmAoC20').value = rec.c20 ?? '';
+ document.getElementById('cmAoC40').value = rec.c40 ?? '';
  document.getElementById('cmDate').value = rec.update || '';
  document.getElementById('cmPacking').value = rec.packing || '';
  } else {
@@ -4737,6 +4884,8 @@ function openCustomModal(editId = '') {
  document.getElementById('cmT10').value = '';
  document.getElementById('cmTr20').value = '';
  document.getElementById('cmTr40').value = '';
+ document.getElementById('cmAoC20').value = '';
+ document.getElementById('cmAoC40').value = '';
  document.getElementById('cmDate').value = new Date().toLocaleDateString('en-GB');
  document.getElementById('cmPacking').value = '';
  }
@@ -4771,8 +4920,10 @@ async function saveCustomRecord() {
  const t10 = num(document.getElementById('cmT10').value);
  const tr20 = num(document.getElementById('cmTr20').value);
  const tr40 = num(document.getElementById('cmTr40').value);
- if (!t1 && !t3 && !t5 && !t10 && !tr20 && !tr40) {
- showToast("Sila isi sekurang-kurangnya satu kuantiti lori / treler!");
+ const aoC20 = num(document.getElementById('cmAoC20').value);
+ const aoC40 = num(document.getElementById('cmAoC40').value);
+ if (!t1 && !t3 && !t5 && !t10 && !tr20 && !tr40 && !aoC20 && !aoC40) {
+ showToast("Sila isi sekurang-kurangnya satu kuantiti lori atau kontena!");
  return;
  }
  const maxQ = Math.max(t1||0, t3||0, t5||0, t10||0, tr20||0, tr40||0);
@@ -4783,6 +4934,8 @@ async function saveCustomRecord() {
  gw: gw,
  totalWeight: (gw && maxQ) ? gw * maxQ : null,
  trucks: { t1, t3, t5, t10, tr20, tr40 },
+ c20: (aoC20 && aoC20 > 0) ? aoC20 : null,
+ c40: (aoC40 && aoC40 > 0) ? aoC40 : null,
  loadingTime: finalDate,
  note: packing
  };
@@ -4798,6 +4951,8 @@ async function saveCustomRecord() {
  size: size,
  gw: gw,
  t1, t3, t5, t10, tr20, tr40,
+ c20: aoC20,
+ c40: aoC40,
  packing: packing,
  update: finalDate
  };
@@ -4884,7 +5039,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_26',
+ app: 'Logistics_Toolbox_V6_7',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
@@ -5148,7 +5303,7 @@ function quickAskInline(presetKey) {
  } else if (presetKey === 'space') {
  inlineEl.innerHTML = `&#x1F4D0; Baki ${snap.contLabel}: <strong>L ${snap.remL}</strong> &bull; <strong>W ${snap.remW}</strong> &bull; <strong>H ${snap.remH}</strong>.`;
  } else if (presetKey === 'wa') {
- const waTxt = `*Muatan V5.39* ${snap.L}x${snap.W}x${snap.H}m | 40'HC: ${snap.pcs40} | 20': ${snap.pcs20}`;
+ const waTxt = `*Muatan V6.7* ${snap.L}x${snap.W}x${snap.H}m | 40'HC: ${snap.pcs40} | 20': ${snap.pcs20}`;
  copyText(waTxt);
  inlineEl.innerHTML = `&#x1F4CB; Draf WA disalin: <strong>${esc(waTxt)}</strong>`;
  }
@@ -5193,7 +5348,7 @@ function getAppWideSnapshot() {
 function openAiQuickDrawer() {
  const snap = getAppWideSnapshot();
  
- 
+
 updateAiKeyStatusUI();
  document.getElementById('aiQuickDrawer').classList.add('open');
 }
@@ -5223,7 +5378,7 @@ function buildLocalAiReply(modeOrQuestion) {
  let plainLines = [];
  if (snap.activeTab === 'anggaran') {
  plainLines = [
- `*Semakan Muatan (${snap.contLabel} - V5.39)*`,
+ `*Semakan Muatan (${snap.contLabel} - V6.7)*`,
  `Saiz: ${snap.L}m x ${snap.W}m x ${snap.H}m`,
  `Kapasiti: 40'HC (${snap.pcs40}) | 20' (${snap.pcs20})`,
  `Baki Ruang (${snap.contLabel}): L ${snap.remL} | W ${snap.remW} | H ${snap.remH}`,
@@ -5231,28 +5386,28 @@ function buildLocalAiReply(modeOrQuestion) {
  ];
  } else if (snap.activeTab === 'gabungan') {
  plainLines = [
- `*Keperluan Kontena Gabungan (V5.39)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.7)*`,
  `Keperluan 40'HC: ${snap.c40}`,
  `Keperluan 20' Std: ${snap.c20}`,
  `Nota Tambahan: ${snap.detail}`
  ];
  } else if (snap.activeTab === 'campuran') {
  plainLines = [
- `*Simulasi Muatan Campuran (V5.39)*`,
+ `*Simulasi Muatan Campuran (Logistics Toolbox V6.7)*`,
  `Ruang Terpakai: ${snap.pct}`,
  `Jumlah Unit: ${snap.units}`,
  `Berat: ${snap.weight}`
  ];
  } else if (snap.activeTab === 'lori') {
  plainLines = [
- `*Cadangan Lori (V5.39)*`,
+ `*Cadangan Lori (Logistics Toolbox V6.7)*`,
  `Article: ${snap.art || '-'}`,
  `Saiz: ${snap.size || '-'}`,
  `Kuantiti: ${snap.qty || '-'} unit`,
  `Cadangan: ${snap.rec || '-'}`
  ];
  } else {
- plainLines = [`*Maklumat Katalog V5.39*`, `Sila salin maklumat terus dari jadual katalog.`];
+ plainLines = [`*Maklumat Katalog V6.7*`, `Sila salin maklumat terus dari jadual katalog.`];
  }
  lastAiDraftWaText = plainLines.join('\n');
  const draftHtml = plainLines.map(l => esc(l)).join('<br>');
@@ -5290,20 +5445,20 @@ async function callGeminiQuickAsk(promptText) {
  else if (snap.activeTab === 'lori') ctxData = `Tab Lori: Produk=${snap.art}, Qty=${snap.qty}, Cadangan lori=${snap.rec}`;
  else ctxData = `Katalog sedang aktif.`;
  
- // Sistem Automatik RAG - Carian Latar Belakang Gudang Pintar
+// Sistem Automatik RAG - Carian Latar Belakang Gudang Pintar
  const qLower = promptText.toLowerCase();
  const tokens = qLower.split(/\s+/).filter(t => t.length > 2 && t !== 'guna' && t !== 'lori' && t !== 'apa' && t !== 'nak' && t !== 'untuk' && t !== 'roll' && t !== 'pcs' && !t.includes('kontena'));
  let matchedData = "";
  if (tokens.length > 0 && typeof articleOutRecords !== 'undefined' && typeof getAllCatalogRecords === 'function') {
-     const catDb = getAllCatalogRecords();
-     const matchAo = articleOutRecords.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
-     const matchCat = catDb.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
-     if (matchAo.length || matchCat.length) {
-         matchedData = "\n\n--- DATA RUJUKAN GUDANG PINTAR (Carian Automatik) ---\n";
-         if (matchAo.length) matchedData += "Kapasiti Lori (Dari Article Out): " + JSON.stringify(matchAo.map(r => ({produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_lori_unit: r.trucks}))) + "\n";
-         if (matchCat.length) matchedData += "Kapasiti Kontena (Dari Katalog): " + JSON.stringify(matchCat.map(r => ({produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_20ft: r.c20, max_40hc: r.c40, susunan40: r.susunan40}))) + "\n";
-         matchedData += "Info Tambahan: Had muatan kontena (20'/40'HC) adalah 25,000kg. Had Lori: t1=1000kg, t3=3000kg, t5=5000kg, t10=10000kg, tr20(Lori 30')=15000kg, tr40(Treler 40')=24000kg. (Sentiasa pastikan berat didarab kuantiti tidak melebihi had kenderaan ini).";
-     }
+ const catDb = getAllCatalogRecords();
+ const matchAo = articleOutRecords.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
+ const matchCat = catDb.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
+ if (matchAo.length || matchCat.length) {
+ matchedData = "\n\n--- DATA RUJUKAN GUDANG PINTAR (Carian Automatik) ---\n";
+ if (matchAo.length) matchedData += "Kapasiti Lori & Kontena (Dari Article Out): " + JSON.stringify(matchAo.map(r => { const ec = getEffectiveContainerCap(r); return {produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_lori_unit: r.trucks, kontena_20ft: ec.c20, kontena_40hc: ec.c40}; })) + "\n";
+ if (matchCat.length) matchedData += "Kapasiti Kontena (Dari Katalog): " + JSON.stringify(matchCat.map(r => ({produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_20ft: r.c20, max_40hc: r.c40, susunan40: r.susunan40}))) + "\n";
+ matchedData += "Info Tambahan: Had muatan kontena (20'/40'HC) adalah 25,000kg. Had Lori: t1=1000kg, t3=3000kg, t5=5000kg, t10=10000kg, tr20(Lori 30')=15000kg, tr40(Treler 40')=24000kg. (Sentiasa pastikan berat didarab kuantiti tidak melebihi had kenderaan ini).";
+ }
  }
  
 const systemPrompt = `Anda pembantu logistik pakar gudang Senawang. Jawab dalam Bahasa Melayu secara ringkas, tepat dan profesional. Konteks UI semasa (jika relevan): ${ctxData}.${matchedData}\n\nArahan PENTING: Jika pengguna bertanya tentang produk spesifik (contohnya PET400/50, GT1000 dll) tanpa merujuk Konteks UI, anda WAJIB kira dan rujuk menggunakan DATA RUJUKAN GUDANG PINTAR yang disertakan di atas. Jika data lori disertakan, rujuk kapasiti 'max_lori_unit' (contoh: t5 bermaksud lori 5 tan). ANDA JUGA WAJIB kira jumlah berat ('berat_seunit_kg' didarab dengan kuantiti) untuk pastikan ia tidak melebihi had muatan selamat (limit kg) kenderaan tersebut sebelum memberi cadangan. Jika berat berlebihan, cadangkan pecah trip atau lori/treler yang lebih besar (contoh tr20 atau tr40).`;
@@ -5322,11 +5477,11 @@ if (!resp.ok) {
  let errDetails = '';
  try { const errData = await resp.json(); errDetails = errData.error ? errData.error.message : JSON.stringify(errData); } catch (e) {}
  if (resp.status === 404) {
-  throw new Error(`Ralat 404: Model <strong>${esc(modelName)}</strong> tidak dijumpai. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em><br>Pastikan anda pilih model terkini <strong>gemini-3.5-flash-lite</strong>. (Model lama telah ditamatkan untuk pengguna baru oleh Google).`);
+ throw new Error(`Ralat 404: Model <strong>${esc(modelName)}</strong> tidak dijumpai. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em><br>Pastikan anda pilih model terkini <strong>gemini-3.5-flash-lite</strong>. (Model lama telah ditamatkan untuk pengguna baru oleh Google).`);
  } else if (resp.status === 400) {
-  throw new Error(`Ralat 400: API Key tidak sah atau sambungan gagal. Sila periksa semula API Key anda. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em>`);
+ throw new Error(`Ralat 400: API Key tidak sah atau sambungan gagal. Sila periksa semula API Key anda. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em>`);
  } else {
-  throw new Error(`HTTP ${resp.status}: ${esc(errDetails)}`);
+ throw new Error(`HTTP ${resp.status}: ${esc(errDetails)}`);
  }
 }
  const data = await resp.json();
