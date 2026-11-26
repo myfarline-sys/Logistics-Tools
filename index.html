@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kalkulator Muatan & Cadangan Lori V5.16 — Logistics Senawang</title>
+<title>Kalkulator Muatan & Cadangan Lori V5.39 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -36,6 +36,27 @@ body {
  color: var(--text);
  padding-bottom: 82px;
 }
+
+/* V5.39 Global AI Floating Button */
+.ai-fab {
+ position: fixed;
+ bottom: 100px;
+ right: 14px;
+ width: 48px;
+ height: 48px;
+ background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+ color: #ffffff;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 22px;
+ box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+ cursor: pointer;
+ z-index: 140;
+ transition: transform 0.1s;
+}
+.ai-fab:active { transform: scale(0.95); }
 
 /* Top Header */
 .top-header {
@@ -286,22 +307,24 @@ body {
  flex-shrink: 0;
 }
 .btn-wa-copy {
- background: #f8fafc;
- border: 1px solid #cbd5e1;
- color: #334155;
- font-size: 11.5px;
- font-weight: 700;
- padding: 5px 10px;
- border-radius: 8px;
+ background: #ecfdf5;
+ border: 1.5px solid #6ee7b7;
+ color: #047857;
+ font-size: 12px;
+ font-weight: 800;
+ padding: 6px 12px;
+ min-height: 34px;
+ border-radius: 9px;
  cursor: pointer;
  display: inline-flex;
  align-items: center;
- gap: 4px;
+ gap: 5px;
  flex-shrink: 0;
 }
+.btn-wa-copy:active { background: #d1fae5; }
 .btn-wa-copy:active { background: #e2e8f0; }
 
-/* V5.16 Weight Guard & SOP Banners */
+/* V5.39 Weight Guard & SOP Banners */
 .weight-guard-banner {
  margin-top: 10px;
  background: #fef2f2;
@@ -533,116 +556,304 @@ body {
 .dark-table tr:last-child td { border-bottom: none; }
 .td-bold { font-weight: 800; color: #0f172a; }
 
-/* Space & Weight Utilization Summary Box (Replaces Visual Floor Plan) */
-.space-summary-box {
+/* Visual Floor Plan Box */
+.plan-box {
  margin-top: 12px;
- background: #f8fafc;
- border: 1.5px solid #cbd5e1;
+ background: var(--grid-bg);
  border-radius: 12px;
  padding: 12px;
- color: #0f172a;
+ color: #fff;
 }
-.ss-toggle-row {
+.plan-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ gap: 8px;
+ margin-bottom: 10px;
+ font-size: 11.5px;
+}
+.plan-title {
+ color: #38bdf8;
+ font-weight: 800;
+ line-height: 1.35;
+}
+.plan-dims {
+ color: #e2e8f0;
+ font-weight: 700;
+ text-align: right;
+ line-height: 1.35;
+}
+.plan-toggle-row {
+ display: flex;
+ gap: 6px;
+ margin-bottom: 10px;
+}
+.plan-switch {
+ background: rgba(255,255,255,0.1);
+ border: 1px solid rgba(255,255,255,0.2);
+ color: #cbd5e1;
+ font-size: 11px;
+ font-weight: 700;
+ padding: 4px 10px;
+ border-radius: 6px;
+ cursor: pointer;
+}
+.plan-switch.active {
+ background: #0284c7;
+ border-color: #38bdf8;
+ color: #fff;
+}
+.floor-grid-wrap {
+ border: 1px dashed rgba(56, 189, 248, 0.45);
+ border-radius: 8px;
+ padding: 8px;
+ overflow-x: auto;
+}
+.floor-grid {
+ display: grid;
+ gap: 6px;
+}
+.floor-tile {
+ background: var(--tile-bg);
+ border: 1.5px solid var(--tile-border);
+ border-radius: 7px;
+ padding: 6px 4px;
+ text-align: center;
+ min-width: 44px;
+}
+.tile-num {
+ font-size: 11.5px;
+ font-weight: 800;
+ color: #e0f2fe;
+}
+.tile-h {
+ font-size: 10.5px;
+ font-weight: 700;
+ color: #7dd3fc;
+ margin-top: 1px;
+}
+
+/* V5.39 Inline AI Quick Ask Card (Refined Mobile Spacing) */
+.ai-inline-card {
+ margin-top: 14px;
+ background: #f8fafc;
+ border: 1.5px solid #93c5fd;
+ border-radius: 14px;
+ padding: 14px;
+}
+.ai-inline-top {
  display: flex;
  justify-content: space-between;
  align-items: center;
- gap: 8px;
+ gap: 10px;
+ margin-bottom: 6px;
+}
+.ai-inline-title {
+ font-size: 12.5px;
+ font-weight: 800;
+ color: #0a2540;
+ margin: 0;
+ line-height: 1.3;
+}
+.ai-inline-sub {
+ font-size: 11.5px;
+ color: #475569;
  margin-bottom: 10px;
- flex-wrap: wrap;
+ line-height: 1.45;
 }
-.ss-switch-group {
+.ai-inline-preview {
+ background: #ffffff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 10px 12px;
+ font-size: 12px;
+ color: #1e293b;
+ line-height: 1.5;
+ margin-bottom: 12px;
+}
+.ai-inline-card .ai-chips-row {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 7px;
+ margin-bottom: 0;
+}
+.ai-inline-card .ai-prompt-chip {
+ padding: 8px 6px;
+ min-height: 38px;
+ border-radius: 10px;
+ font-size: 11.5px;
+ text-align: center;
  display: flex;
- gap: 6px;
+ align-items: center;
+ justify-content: center;
+ line-height: 1.25;
 }
-.ss-switch {
+.ai-cont-pills {
+ display: inline-flex;
+ gap: 5px;
+ margin-bottom: 9px;
+}
+.ai-cont-pill {
  background: #e2e8f0;
  border: 1px solid #cbd5e1;
- color: #475569;
- font-size: 11.5px;
- font-weight: 700;
+ color: #334155;
+ border-radius: 8px;
  padding: 5px 11px;
- border-radius: 7px;
+ font-size: 11.5px;
+ font-weight: 800;
  cursor: pointer;
 }
-.ss-switch.active {
+.ai-cont-pill.active {
  background: #0a2540;
  border-color: #0a2540;
  color: #ffffff;
 }
-.ss-dims-tag {
- font-size: 11px;
- font-weight: 700;
- color: #0369a1;
- background: #e0f2fe;
- padding: 3px 8px;
- border-radius: 6px;
+.btn-ai-quick-ask {
+ background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+ color: #ffffff;
+ border: none;
+ border-radius: 10px;
+ padding: 8px 14px;
+ min-height: 36px;
+ font-size: 12px;
+ font-weight: 800;
+ cursor: pointer;
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
 }
-.ss-metric-block {
+.btn-ai-quick-ask:active { opacity: 0.9; }
+.ai-drawer-backdrop {
+ position: fixed;
+ inset: 0;
+ background: rgba(15, 23, 42, 0.62);
+ z-index: 260;
+ display: none;
+ align-items: flex-end;
+ justify-content: center;
+}
+.ai-drawer-backdrop.open { display: flex; }
+.ai-drawer-sheet {
  background: #ffffff;
- border: 1px solid #e2e8f0;
- border-radius: 9px;
- padding: 9px 10px;
- margin-bottom: 8px;
+ width: 100%;
+ max-width: 520px;
+ border-radius: 18px 18px 0 0;
+ padding: 14px 14px 20px;
+ max-height: 86vh;
+ overflow-y: auto;
+ box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.25);
 }
-.ss-metric-head {
+.ai-drawer-handle {
+ width: 42px;
+ height: 4px;
+ background: #cbd5e1;
+ border-radius: 999px;
+ margin: 0 auto 10px;
+}
+.ai-drawer-head {
  display: flex;
  justify-content: space-between;
  align-items: center;
- font-size: 11.5px;
- font-weight: 700;
- color: #334155;
- margin-bottom: 5px;
+ gap: 8px;
+ margin-bottom: 8px;
 }
-.ss-bar-track {
- width: 100%;
- height: 9px;
- background: #e2e8f0;
- border-radius: 999px;
- overflow: hidden;
-}
-.ss-bar-fill {
- height: 100%;
- background: #0284c7;
- border-radius: 999px;
- transition: width 0.2s ease, background-color 0.2s ease;
-}
-.ss-bar-fill.safe { background: #16a34a; }
-.ss-bar-fill.warn { background: #f59e0b; }
-.ss-bar-fill.danger { background: #dc2626; }
-.ss-rem-grid {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- gap: 6px;
- margin-top: 8px;
-}
-.ss-rem-cell {
- background: #ffffff;
- border: 1px solid #e2e8f0;
- border-radius: 8px;
- padding: 7px 6px;
- text-align: center;
-}
-.ss-rem-lbl {
- font-size: 10px;
- font-weight: 700;
- color: #64748b;
- text-transform: uppercase;
-}
-.ss-rem-val {
- font-size: 12.5px;
+.ai-drawer-title {
+ margin: 0;
+ font-size: 14.5px;
  font-weight: 800;
- color: #0f172a;
- margin-top: 2px;
+ color: #0a2540;
 }
-.ss-guide-note {
- margin-top: 8px;
- font-size: 11.5px;
- line-height: 1.45;
+.ai-ctx-strip {
+ background: #f1f5f9;
+ border: 1px solid #cbd5e1;
+ border-radius: 9px;
+ padding: 7px 10px;
+ font-size: 11px;
  color: #334155;
- background: #eff6ff;
- border: 1px solid #bfdbfe;
- border-radius: 8px;
+ font-weight: 600;
+ margin-bottom: 9px;
+ line-height: 1.4;
+}
+.ai-chips-row {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 6px;
+ margin-bottom: 9px;
+}
+.ai-prompt-chip {
+ background: #e0f2fe;
+ border: 1px solid #7dd3fc;
+ color: #0369a1;
+ border-radius: 999px;
+ padding: 5px 10px;
+ font-size: 11px;
+ font-weight: 700;
+ cursor: pointer;
+}
+.ai-prompt-chip:active { background: #bae6fd; }
+.ai-chat-log {
+ background: #f8fafc;
+ border: 1px solid #e2e8f0;
+ border-radius: 11px;
+ padding: 10px;
+ min-height: 120px;
+ max-height: 240px;
+ overflow-y: auto;
+ margin-bottom: 9px;
+ font-size: 12px;
+ line-height: 1.45;
+ color: #0f172a;
+}
+.ai-msg-user {
+ background: #0284c7;
+ color: #ffffff;
+ padding: 7px 10px;
+ border-radius: 10px 10px 2px 10px;
+ margin-bottom: 8px;
+ font-weight: 600;
+}
+.ai-msg-bot {
+ background: #ffffff;
+ border: 1px solid #cbd5e1;
+ color: #1e293b;
  padding: 8px 10px;
+ border-radius: 10px 10px 10px 2px;
+ margin-bottom: 8px;
+}
+.ai-input-bar {
+ display: flex;
+ gap: 6px;
+ margin-bottom: 8px;
+}
+.ai-input-field {
+ flex: 1;
+ padding: 9px 11px;
+ border: 1.5px solid #93c5fd;
+ border-radius: 9px;
+ font-size: 13px;
+ color: #0f172a;
+ outline: none;
+}
+.ai-input-field:focus { border-color: #0284c7; }
+.ai-send-btn {
+ background: #0a2540;
+ color: #ffffff;
+ border: none;
+ border-radius: 9px;
+ padding: 0 14px;
+ font-size: 12px;
+ font-weight: 800;
+ cursor: pointer;
+}
+.ai-local-note {
+ background: #fffbeb;
+ border: 1px solid #fde68a;
+ border-radius: 9px;
+ padding: 8px 10px;
+ font-size: 11px;
+ color: #78350f;
+ line-height: 1.45;
 }
 
 /* Catalog & Multi-Item Tabs Styling */
@@ -1206,7 +1417,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.16</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Kalkulator Muatan <span class="v-badge">V5.39</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1390,10 +1601,31 @@ body {
  <div id="anggaranWeightAlertBox"></div>
  </div>
 
- <!-- Card 3 -->
+ <!-- Card 3 (Dinaikkan daripada No. 4) -->
  <div class="sec-card">
  <div class="sec-head">
- <h2 class="sec-title">3. PECAHAN SUSUNAN FIZIKAL (FOLD / LAYER)</h2>
+ <h2 class="sec-title">3. SENARAI ITEM SEPADAN 'FAB (INTERNAL)'</h2>
+ <span class="badge-blue" id="matchedTableBadge">2<br>item</span>
+ </div>
+ <div class="table-scroll">
+ <table class="dark-table">
+ <thead>
+ <tr>
+ <th>Article</th>
+ <th>Item Code</th>
+ <th>Size</th>
+ <th>20'</th>
+ <th>40'</th>
+ </tr>
+ </thead>
+ <tbody id="matchedFabBody"></tbody>
+ </table>
+ </div>
+ </div>
+ <!-- Card 4 (Susunan Fizikal & AI Quick Ask) -->
+ <div class="sec-card">
+ <div class="sec-head">
+ <h2 class="sec-title">4. PECAHAN SUSUNAN FIZIKAL &amp; AI QUICK ASK</h2>
  <span class="badge-blue">Teori<br>Asas</span>
  </div>
  <div class="table-scroll">
@@ -1426,76 +1658,6 @@ body {
  </table>
  </div>
 
- <!-- Ringkasan Baki Ruang, % Isipadu & Had Berat -->
- <div class="space-summary-box">
- <div class="ss-toggle-row">
- <div class="ss-switch-group">
- <button type="button" class="ss-switch active" id="btnPlan40" onclick="switchPlanCont('40')">40' HC (12.00m)</button>
- <button type="button" class="ss-switch" id="btnPlan20" onclick="switchPlanCont('20')">20' Std (6.00m)</button>
- </div>
- <span class="ss-dims-tag" id="ssTheorySummary">5(L) &times; 2(W) &times; 3(H) = 30 unit</span>
- </div>
-
- <div class="ss-metric-block">
- <div class="ss-metric-head">
- <span>&#x1F4E6; Penggunaan Isipadu Ruang</span>
- <strong id="ssVolStat">0% (0.00 / 70.86 m&sup3;)</strong>
- </div>
- <div class="ss-bar-track">
- <div class="ss-bar-fill" id="ssVolBar" style="width:0%"></div>
- </div>
- </div>
-
- <div class="ss-metric-block">
- <div class="ss-metric-head">
- <span>&#x2696; Status Had Berat (Maks 25,000 kg)</span>
- <strong id="ssWeightStat">Masukkan GW / Unit</strong>
- </div>
- <div class="ss-bar-track">
- <div class="ss-bar-fill safe" id="ssWeightBar" style="width:0%"></div>
- </div>
- </div>
-
- <div class="ss-rem-grid">
- <div class="ss-rem-cell">
- <div class="ss-rem-lbl">Baki Panjang (L)</div>
- <div class="ss-rem-val" id="ssRemL">-</div>
- </div>
- <div class="ss-rem-cell">
- <div class="ss-rem-lbl">Baki Lebar (W)</div>
- <div class="ss-rem-val" id="ssRemW">-</div>
- </div>
- <div class="ss-rem-cell">
- <div class="ss-rem-lbl">Baki Tinggi (H)</div>
- <div class="ss-rem-val" id="ssRemH">-</div>
- </div>
- </div>
-
- <div class="ss-guide-note" id="ssLoadingGuide">
- &#x1F4A1; Masukkan dimensi dan berat unit untuk semakan baki ruang serta panduan susunan.
- </div>
- </div>
- </div>
-
- <!-- Card 4 -->
- <div class="sec-card">
- <div class="sec-head">
- <h2 class="sec-title">4. SENARAI ITEM SEPADAN 'FAB (INTERNAL)'</h2>
- <span class="badge-blue" id="matchedTableBadge">2<br>item</span>
- </div>
- <div class="table-scroll">
- <table class="dark-table">
- <thead>
- <tr>
- <th>Article</th>
- <th>Item Code</th>
- <th>Size</th>
- <th>20'</th>
- <th>40'</th>
- </tr>
- </thead>
- <tbody id="matchedFabBody"></tbody>
- </table>
  </div>
  </div>
 </div>
@@ -1701,6 +1863,9 @@ body {
  </button>
 </nav>
 
+<!-- V5.39 Global AI Floating Button -->
+<div class="ai-fab" onclick="openAiQuickDrawer()" title="Tanya AI">✨</div>
+
 <!-- MODAL: GOOGLE APPS SCRIPT 2-WAY SYNC & PUSH -->
 <div class="modal-bg" id="appsScriptModal" onclick="if(event.target===this) closeAppsScriptModal()">
  <div class="modal-card">
@@ -1727,12 +1892,12 @@ body {
  <ol style="margin:8px 0 8px 18px;padding:0;font-size:11.5px;color:#334155;line-height:1.45;">
  <li>Buka fail <strong>Loading Capacity V3.0</strong> di Google Sheets.</li>
  <li>Tekan menu <strong>Extensions &rarr; Apps Script</strong>.</li>
- <li>Padam kod asal &amp; tampal kod V5.16 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
+ <li>Padam kod asal &amp; tampal kod V5.39 di bawah, kemudian tekan ikon <strong>Save</strong>.</li>
  <li>Tekan <strong>Deploy &rarr; New deployment</strong> &rarr; pilih jenis <strong>Web app</strong> (atau <em>Manage deployments &rarr; Edit &rarr; New version</em> jika sudah ada).</li>
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.16)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (V5.39)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -1941,6 +2106,53 @@ function doPost(e) {
  </div>
 </div>
 
+<!-- V5.39 AI QUICK ASK DRAWER -->
+<div class="ai-drawer-backdrop" id="aiQuickDrawer" onclick="if(event.target===this) closeAiQuickDrawer()">
+ <div class="ai-drawer-sheet">
+ <div class="ai-drawer-handle"></div>
+ <div class="ai-drawer-head">
+ <h3 class="ai-drawer-title" style="display:flex;align-items:center;gap:8px;">&#x2728; AI Quick Ask <span style="font-size:10px;background:#e0f2fe;color:#0284c7;padding:2px 6px;border-radius:4px;font-weight:800;letter-spacing:0.3px;">Gudang Pintar Aktif ✨</span></h3>
+ <button type="button" class="btn-del" onclick="closeAiQuickDrawer()">&times;</button>
+ </div>
+
+ 
+
+ <div class="ai-chat-log" id="aiQuickChatLog">
+ <div class="ai-msg-bot">Sedia membantu! Pilih butang pantas di atas atau tanya mengenai baki ruang, had berat kontena, atau draf laporan untuk dimensi semasa.</div>
+ </div>
+
+ <div class="ai-input-bar">
+ <input type="text" id="aiQuickInput" class="ai-input-field" placeholder="Tanya soalan ringkas (cth: muat tak, cukup had berat?)..." onkeydown="if(event.key==='Enter') submitAiQuickQuestion()">
+ <button type="button" class="ai-send-btn" onclick="submitAiQuickQuestion()">Tanya</button>
+ </div>
+
+ <details class="ai-local-note" style="margin-bottom:8px;">
+ <summary style="font-weight:800;cursor:pointer;">&#x1F511; Panduan API Key &amp; Privasi Telefon Rakan Sekerja</summary>
+ <div style="margin-top:6px;">
+ <strong>1. Simpanan di Telefon Sendiri Sahaja:</strong> API Key dan tetapan AI yang anda masukkan di sini <strong>hanya disimpan dalam penyimpanan pelayar telefon anda sendiri (localStorage)</strong>—tidak dihantar ke pelayan luar atau dikongsi bersama fail apabila pautan/fail dihantar kepada rakan sekerja.<br>
+ <strong>2. Cara Meletakkan API Key pada Telefon Rakan Sekerja:</strong> Buka pautan/fail aplikasi di telefon rakan sekerja &rarr; buka <strong>AI Quick Ask</strong> &rarr; buka bahagian <strong>Tetapan Gemini API Key</strong> di bawah &rarr; tampal API Key mereka sendiri &rarr; tekan <strong>Simpan Key</strong>. (Jika rakan sekerja tidak mahu guna API Key, semakan baki ruang, had berat &amp; draf WA tetap boleh digunakan secara terus).<br>
+ <strong>3. Cara Mendapatkan API Key:</strong> Log masuk ke <strong>Google AI Studio</strong> (<code>aistudio.google.com</code>) menggunakan akaun Google &rarr; pilih <strong>Get API key</strong> &rarr; cipta &amp; salin kunci API.
+ </div>
+ </details>
+
+ <details class="ai-local-note" style="background:#f8fafc;border-color:#cbd5e1;color:#334155;">
+ <summary style="font-weight:800;cursor:pointer;">&#x2699; Tetapan Gemini API Key (Pilihan — Peranti Ini Sahaja)</summary>
+ <div style="margin-top:6px;display:flex;gap:6px;">
+ <input type="password" id="aiGeminiKeyInput" class="form-input" style="padding:7px 9px;font-size:12px;" placeholder="Tampal Gemini API Key (simpan di telefon ini sahaja)">
+ </div>
+ <div style="margin-top:6px;display:flex;gap:6px;">
+ <select id="aiGeminiModelInput" class="form-input" style="padding:7px 9px;font-size:12px;background:#fff;width:150px;">
+ <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Terkini)</option>
+ <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+ <option value="gemini-2.0-flash-exp">gemini-2.0-flash-exp</option>
+</select>
+ <button type="button" class="btn-sm-card blue-tint" style="padding:7px 10px;white-space:nowrap;" onclick="saveAiGeminiKey()">Simpan Key</button>
+ </div>
+ <div id="aiKeyStatusText" style="font-size:10.5px;color:#64748b;margin-top:4px;">Mod aktif: Kiraan &amp; Panduan Lokal (Terus berfungsi tanpa API Key)</div>
+ </details>
+ </div>
+</div>
+
 <div class="toast" id="toast">Disalin!</div>
 
 <script>
@@ -1953,7 +2165,7 @@ const CUSTOM_KEY = 'solmax_v4_custom_records';
 const LAST_SYNC_KEY = 'solmax_v5_last_sync_ts';
 const APPS_SCRIPT_URL_KEY = 'solmax_v5_apps_script_url';
 
-// Had Berat Selamat (kg) V5.16
+// Had Berat Selamat (kg) V5.39
 const CONTAINER_WEIGHT_LIMIT_KG = 25000;
 const TRUCK_WEIGHT_LIMITS_KG = {
  t1: 1000,
@@ -3175,7 +3387,7 @@ function switchMainTab(tabName) {
  document.getElementById('nav-' + tabName).classList.add('active');
 }
 
-/* V5.16 Helper: SOP KE2300 & Special Arrangement Alerts */
+/* V5.39 Helper: SOP KE2300 & Special Arrangement Alerts */
 function hasKe2300Record(records) {
  return records.some(r => {
  const joined = `${str(r.article)} ${str(r.code)}`.toUpperCase();
@@ -3256,8 +3468,10 @@ function applyPreset(L, W, H, btn) {
 
 function switchPlanCont(type) {
  activePlanCont = type;
- document.getElementById('btnPlan40').classList.toggle('active', type === '40');
- document.getElementById('btnPlan20').classList.toggle('active', type === '20');
+ const b40 = document.getElementById('btnPlan40');
+ const b20 = document.getElementById('btnPlan20');
+ if (b40) b40.classList.toggle('active', type === '40');
+ if (b20) b20.classList.toggle('active', type === '20');
  recalcSizeEstimator();
 }
 
@@ -3307,43 +3521,17 @@ function recalcSizeEstimator() {
  const contTotalVol = cSpec.L * cSpec.W * cSpec.H;
  const usedVol = theoryUnits * vol;
  const volPct = contTotalVol > 0 ? Math.min(100, Math.round((usedVol / contTotalVol) * 100)) : 0;
-
- const theoryEl = document.getElementById('ssTheorySummary');
- if (theoryEl) {
- theoryEl.innerHTML = `${pL}(L) &times; ${pW}(W) &times; ${pH}(H) = <strong>${theoryUnits} unit</strong>`;
- }
-
- const volStatEl = document.getElementById('ssVolStat');
- const volBarEl = document.getElementById('ssVolBar');
- if (volStatEl && volBarEl) {
- volStatEl.textContent = `${volPct}% (${usedVol.toFixed(2)} / ${contTotalVol.toFixed(2)} m³)`;
- volBarEl.style.width = `${volPct}%`;
- volBarEl.className = 'ss-bar-fill ' + (volPct >= 85 ? 'safe' : (volPct >= 60 ? '' : 'warn'));
- }
-
- const remLEl = document.getElementById('ssRemL');
- const remWEl = document.getElementById('ssRemW');
- const remHEl = document.getElementById('ssRemH');
- const guideEl = document.getElementById('ssLoadingGuide');
-
+ const inlineEl = document.getElementById('aiInlineSummary');
+ if (inlineEl) {
  if (L > 0 && W > 0 && H > 0 && pL > 0 && pW > 0 && pH > 0) {
  const remL = Math.max(0, cSpec.L - (pL * L));
  const remW = Math.max(0, cSpec.W - (pW * W));
  const remH = Math.max(0, cSpec.H - (pH * H));
- if (remLEl) remLEl.textContent = `${remL.toFixed(2)} m (${Math.round(remL * 100)} cm)`;
- if (remWEl) remWEl.textContent = `${remW.toFixed(2)} m (${Math.round(remW * 100)} cm)`;
- if (remHEl) remHEl.textContent = `${remH.toFixed(2)} m (${Math.round(remH * 100)} cm)`;
-
- const tips = [];
- if (remL >= 0.40) tips.push(`Baki ruang panjang <strong>${remL.toFixed(2)} m</strong> di pintu kontena — sesuai untuk selitan unit melintang atau pasang <em>airbag / dunnage</em>.`);
- else tips.push(`Susunan panjang rapat (baki hanya <strong>${Math.round(remL * 100)} cm</strong>) — pastikan pintu kontena boleh ditutup rapat.`);
- if (remW >= 0.35) tips.push(`Baki lebar <strong>${Math.round(remW * 100)} cm</strong> — gunakan kayu penyendal/pallet supaya muatan tidak beralih semasa perjalanan.`);
- if (guideEl) guideEl.innerHTML = `&#x1F4A1; <strong>Panduan Ruang (${is40 ? "40'HC" : "20' Std"}):</strong> ${tips.join(' ')}`;
+ const cTitle = is40 ? "40'HC" : "20' Std";
+ inlineEl.innerHTML = `${cTitle}: <strong>${theoryUnits} unit</strong> (Baki: ${remL.toFixed(2)}m L / ${remW.toFixed(2)}m W / ${remH.toFixed(2)}m H) &bull; Isipadu: <strong>${volPct}%</strong>`;
  } else {
- if (remLEl) remLEl.textContent = '-';
- if (remWEl) remWEl.textContent = '-';
- if (remHEl) remHEl.textContent = '-';
- if (guideEl) guideEl.innerHTML = `&#x26A0; Dimensi unit melebihi ruang dalaman kontena ${is40 ? "40'HC" : "20' Std"}.`;
+ inlineEl.innerHTML = `&#x26A0; Dimensi unit melebihi ruang dalaman kontena.`;
+ }
  }
 
  const tol = 0.05;
@@ -3417,30 +3605,6 @@ function recalcSizeEstimator() {
  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#64748b;padding:14px;">Tiada rekod dimensi tepat dalam Fab (Internal). Menggunakan kiraan fizikal L&times;W&times;H.</td></tr>`;
  }
 
- const activePcsForWeight = is40 ? finalPcs40 : finalPcs20;
- const weightStatEl = document.getElementById('ssWeightStat');
- const weightBarEl = document.getElementById('ssWeightBar');
- if (weightStatEl && weightBarEl) {
- if (gwUnit && activePcsForWeight > 0) {
- const estTotalKg = activePcsForWeight * gwUnit;
- const wPct = Math.round((estTotalKg / CONTAINER_WEIGHT_LIMIT_KG) * 100);
- const remKg = CONTAINER_WEIGHT_LIMIT_KG - estTotalKg;
- weightStatEl.textContent = `${estTotalKg.toLocaleString()} kg (${wPct}%)`;
- weightBarEl.style.width = `${Math.min(100, wPct)}%`;
- weightBarEl.className = 'ss-bar-fill ' + (wPct > 100 ? 'danger' : (wPct >= 85 ? 'warn' : 'safe'));
- if (guideEl && pL > 0 && pW > 0 && pH > 0) {
- const wNote = remKg >= 0
- ? `Baki had berat selamat: <strong>${remKg.toLocaleString()} kg</strong>.`
- : `<span style="color:#b91c1c;font-weight:800;">Melebihi had berat selamat sebanyak +${Math.abs(remKg).toLocaleString()} kg!</span>`;
- guideEl.innerHTML += `<br>&#x2696; <strong>Semakan Berat (${activePcsForWeight} unit):</strong> ${wNote}`;
- }
- } else {
- weightStatEl.textContent = 'Isi Anggaran GW / Unit';
- weightBarEl.style.width = '0%';
- weightBarEl.className = 'ss-bar-fill safe';
- }
- }
-
  if (weightAlertEl) {
  const w40Total = gwUnit ? finalPcs40 * gwUnit : 0;
  const w20Total = gwUnit ? finalPcs20 * gwUnit : 0;
@@ -3465,7 +3629,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics V5.16)*`,
+ `*Anggaran Muatan Kontena (Logistics V5.39)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -3473,7 +3637,7 @@ function copyAnggaranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Multi-Order & Mixed Simulator (V5.16 with Lorry Support) */
+/* Multi-Order & Mixed Simulator (V5.39 with Lorry Support) */
 function getValidMultiItems() {
  return getAllCatalogRecords().filter(r =>
  (r.c40 && r.c40 > 0) ||
@@ -3811,7 +3975,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics V5.16)*`,
+ `*Keperluan Kontena Gabungan (Logistics V5.39)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -3846,7 +4010,7 @@ function copyCampuranWA() {
  copyText(lines.join('\n'));
 }
 
-/* Catalog Tab & V5.16 Quick Shortcut Actions */
+/* Catalog Tab & V5.39 Quick Shortcut Actions */
 function populateCatalogArticles() {
  const sel = document.getElementById('catArticleFilter');
  const arts = [...new Set(getAllCatalogRecords().map(r => r.article).filter(Boolean))].sort();
@@ -4088,7 +4252,7 @@ function copyCatalogItemWA(idx) {
  copyText(lines.join('\n'));
 }
 
-/* Lorry Search & Recommendation Tab (V5.16 with Weight Limit Guard & SOP KE2300) */
+/* Lorry Search & Recommendation Tab (V5.39 with Weight Limit Guard & SOP KE2300) */
 const TRUCK_META = [
  { key: 't1', label: 'Lori 1 Tan', rank: 1, limitKg: 1000 },
  { key: 't3', label: 'Lori 3 Tan', rank: 2, limitKg: 3000 },
@@ -4308,7 +4472,7 @@ function evaluateTruckRecommendation(artName, rows, qty, selectedSize = '', truc
  };
  }
 
- // V5.16: Consider both unit capacity AND truck tonnage weight limit
+ // V5.39: Consider both unit capacity AND truck tonnage weight limit
  const singleTripFit = available
  .filter(a => a.maxCap >= qty && (!totalEstKg || totalEstKg <= a.limitKg))
  .sort((a, b) => (a.rank - b.rank) || (a.maxCap - b.maxCap));
@@ -4515,7 +4679,7 @@ function copyLoriItemWA(idx) {
  .filter(tm => r.trucks && r.trucks[tm.key] > 0)
  .map(tm => `${tm.label}: ${r.trucks[tm.key]} unit`);
  const lines = [
- `*Rekod Lori Article Out (Logistics V5.16)*`,
+ `*Rekod Lori Article Out (Logistics V5.39)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -4720,7 +4884,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Kalkulator_Muatan_V5_16',
+ app: 'Logistics_Kalkulator_Muatan_V5_26',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
@@ -4888,6 +5052,329 @@ function showToast(msg) {
  t.textContent = msg;
  t.classList.add('show');
  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+const AI_GEMINI_KEY_STORAGE = 'solmax_v5_20_gemini_api_key';
+const AI_GEMINI_MODEL_STORAGE = 'solmax_v5_20_gemini_model';
+let lastAiDraftWaText = '';
+
+function getSavedGeminiApiKey() {
+ return (localStorage.getItem(AI_GEMINI_KEY_STORAGE) || localStorage.getItem('solmax_v5_18_gemini_api_key') || '').trim();
+}
+
+function getSavedGeminiModel() {
+ return (localStorage.getItem(AI_GEMINI_MODEL_STORAGE) || 'gemini-3.5-flash-lite').trim();
+}
+
+function updateAiKeyStatusUI() {
+ const st = document.getElementById('aiKeyStatusText');
+ const inp = document.getElementById('aiGeminiKeyInput');
+ const modInp = document.getElementById('aiGeminiModelInput');
+ const hasKey = Boolean(getSavedGeminiApiKey());
+ if (inp && hasKey && !inp.value) {
+ inp.value = getSavedGeminiApiKey();
+ }
+ if (modInp) {
+ modInp.value = getSavedGeminiModel();
+ }
+ if (st) {
+ st.innerHTML = hasKey
+ ? `Status: <strong>API Key tersimpan</strong> (Model: ${esc(getSavedGeminiModel())})`
+ : 'Mod aktif: <strong>Kiraan &amp; Panduan Lokal</strong> (Terus berfungsi tanpa API Key; simpanan hanya di telefon sendiri)';
+ }
+}
+
+function saveAiGeminiKey() {
+ const inp = document.getElementById('aiGeminiKeyInput');
+ const modInp = document.getElementById('aiGeminiModelInput');
+ const val = inp ? inp.value.trim() : '';
+ const modVal = modInp ? modInp.value.trim() : 'gemini-3.5-flash-lite';
+ 
+if (!val) {
+ localStorage.removeItem(AI_GEMINI_KEY_STORAGE);
+ localStorage.removeItem('solmax_v5_18_gemini_api_key');
+ localStorage.removeItem(AI_GEMINI_MODEL_STORAGE);
+ updateAiKeyStatusUI();
+ showToast('API Key dipadam daripada telefon ini.');
+ return;
+ }
+ localStorage.setItem(AI_GEMINI_KEY_STORAGE, val);
+ localStorage.setItem(AI_GEMINI_MODEL_STORAGE, modVal);
+ updateAiKeyStatusUI();
+ showToast('API Key & Model disimpan!');
+}
+
+function copyLastAiDraftWa() {
+ if (!lastAiDraftWaText) {
+ showToast('Tiada draf WA untuk disalin.');
+ return;
+ }
+ copyText(lastAiDraftWaText);
+}
+
+function getCurrentAnggaranSnapshot() {
+ const L = parseFloat(document.getElementById('inL').value) || 0;
+ const W = parseFloat(document.getElementById('inW').value) || 0;
+ const H = parseFloat(document.getElementById('inH').value) || 0;
+ const gwUnit = num(document.getElementById('inGW').value);
+ const is40 = activePlanCont === '40';
+ const cSpec = is40 ? { L: 12.00, W: 2.28, H: 2.59 } : { L: 6.00, W: 2.28, H: 2.28 };
+ const contLabel = is40 ? "40'HC" : "20' Std";
+ const pcs40 = document.getElementById('res40Pcs').textContent.trim();
+ const pcs20 = document.getElementById('res20Pcs').textContent.trim();
+ const volStat = document.getElementById('aiInlineSummary') ? document.getElementById('aiInlineSummary').textContent.trim() : '-';
+ const remL = L > 0 ? Math.max(0, cSpec.L - (Math.floor(cSpec.L / L) * L)).toFixed(2) + ' m' : '-';
+ const remW = W > 0 ? Math.max(0, cSpec.W - (Math.floor(cSpec.W / W) * W)).toFixed(2) + ' m' : '-';
+ const remH = H > 0 ? Math.max(0, cSpec.H - (Math.floor(cSpec.H / H) * H)).toFixed(2) + ' m' : '-';
+ const activePcs = is40 ? (num(pcs40) || 0) : (num(pcs20) || 0);
+ const estTotalKg = gwUnit && activePcs ? activePcs * gwUnit : null;
+ return { L, W, H, gwUnit, contLabel, pcs40, pcs20, volStat, remL, remW, remH, activePcs, estTotalKg };
+}
+
+function quickAskInline(presetKey) {
+ const snap = getCurrentAnggaranSnapshot();
+ const inlineEl = document.getElementById('aiInlineSummary');
+ if (inlineEl) {
+ if (presetKey === 'overweight') {
+ if (!snap.gwUnit) {
+ inlineEl.innerHTML = `&#x2696; Isi <strong>Anggaran GW / Unit (kg)</strong> untuk semak had berat <strong>25,000 kg</strong>.`;
+ } else {
+ const tot = snap.activePcs * snap.gwUnit;
+ const diff = CONTAINER_WEIGHT_LIMIT_KG - tot;
+ inlineEl.innerHTML = diff >= 0
+ ? `&#x2705; Berat ${snap.contLabel}: <strong>${tot.toLocaleString()} kg</strong> (baki had selamat <strong>${diff.toLocaleString()} kg</strong>).`
+ : `&#x26A0; Berat ${snap.contLabel}: <strong>${tot.toLocaleString()} kg</strong> (lebih <strong>+${Math.abs(diff).toLocaleString()} kg</strong> daripada 25,000 kg).`;
+ }
+ } else if (presetKey === 'space') {
+ inlineEl.innerHTML = `&#x1F4D0; Baki ${snap.contLabel}: <strong>L ${snap.remL}</strong> &bull; <strong>W ${snap.remW}</strong> &bull; <strong>H ${snap.remH}</strong>.`;
+ } else if (presetKey === 'wa') {
+ const waTxt = `*Muatan V5.39* ${snap.L}x${snap.W}x${snap.H}m | 40'HC: ${snap.pcs40} | 20': ${snap.pcs20}`;
+ copyText(waTxt);
+ inlineEl.innerHTML = `&#x1F4CB; Draf WA disalin: <strong>${esc(waTxt)}</strong>`;
+ }
+ }
+ openAiQuickDrawer();
+ runAiQuickPreset(presetKey);
+}
+
+
+function getAppWideSnapshot() {
+ const snap = getCurrentAnggaranSnapshot();
+ // Base snap comes from Anggaran Saiz. We augment it with active tab info.
+ const activeTabId = document.querySelector('.nav-item.active').id.replace('nav-', '');
+ snap.activeTab = activeTabId;
+ 
+// Gather tab-specific context
+ if (activeTabId === 'gabungan') {
+ snap.tabContext = 'Gabungan Order';
+ snap.c40 = document.getElementById('gab40Cont') ? document.getElementById('gab40Cont').textContent.trim() : '0';
+ snap.c20 = document.getElementById('gab20Cont') ? document.getElementById('gab20Cont').textContent.trim() : '0';
+ snap.detail = document.getElementById('gab40Detail') ? document.getElementById('gab40Detail').textContent.trim() : '';
+ } else if (activeTabId === 'campuran') {
+ snap.tabContext = 'Muatan Campuran';
+ snap.pct = document.getElementById('mixPct') ? document.getElementById('mixPct').textContent.trim() : '0%';
+ snap.units = document.getElementById('mixUnits') ? document.getElementById('mixUnits').textContent.trim() : '0';
+ snap.weight = document.getElementById('mixWeight') ? document.getElementById('mixWeight').textContent.trim() : '0 kg';
+ } else if (activeTabId === 'lori') {
+ snap.tabContext = 'Cadangan Lori';
+ snap.art = document.getElementById('loriArticleSelect') ? document.getElementById('loriArticleSelect').value : '';
+ snap.size = document.getElementById('loriSizeSelect') ? document.getElementById('loriSizeSelect').value : '';
+ snap.qty = document.getElementById('loriQtyInput') ? document.getElementById('loriQtyInput').value : '';
+ snap.rec = document.getElementById('loriRecMain') ? document.getElementById('loriRecMain').textContent.trim() : '';
+ } else if (activeTabId === 'katalog') {
+ snap.tabContext = 'Katalog Produk';
+ snap.search = document.getElementById('catSearch') ? document.getElementById('catSearch').value : '';
+ } else {
+ snap.tabContext = 'Anggaran Saiz';
+ }
+ return snap;
+}
+
+function openAiQuickDrawer() {
+ const snap = getAppWideSnapshot();
+ 
+ 
+updateAiKeyStatusUI();
+ document.getElementById('aiQuickDrawer').classList.add('open');
+}
+
+
+function closeAiQuickDrawer() {
+ document.getElementById('aiQuickDrawer').classList.remove('open');
+}
+
+function appendAiChatBubble(sender, textHtml) {
+ const log = document.getElementById('aiQuickChatLog');
+ if (!log) return null;
+ const div = document.createElement('div');
+ div.className = sender === 'user' ? 'ai-msg-user' : 'ai-msg-bot';
+ div.innerHTML = textHtml;
+ log.appendChild(div);
+ log.scrollTop = log.scrollHeight;
+ return div;
+}
+
+function buildLocalAiReply(modeOrQuestion) {
+ const snap = getAppWideSnapshot();
+ const q = String(modeOrQuestion || '').toLowerCase();
+
+ // Cross-tab WA Drafts
+ if (q === 'wa' || q.includes('whatsapp') || q.includes('draf')) {
+ let plainLines = [];
+ if (snap.activeTab === 'anggaran') {
+ plainLines = [
+ `*Semakan Muatan (${snap.contLabel} - V5.39)*`,
+ `Saiz: ${snap.L}m x ${snap.W}m x ${snap.H}m`,
+ `Kapasiti: 40'HC (${snap.pcs40}) | 20' (${snap.pcs20})`,
+ `Baki Ruang (${snap.contLabel}): L ${snap.remL} | W ${snap.remW} | H ${snap.remH}`,
+ ...(snap.estTotalKg ? [`Anggaran Berat: ${snap.estTotalKg.toLocaleString()} kg`] : [])
+ ];
+ } else if (snap.activeTab === 'gabungan') {
+ plainLines = [
+ `*Keperluan Kontena Gabungan (V5.39)*`,
+ `Keperluan 40'HC: ${snap.c40}`,
+ `Keperluan 20' Std: ${snap.c20}`,
+ `Nota Tambahan: ${snap.detail}`
+ ];
+ } else if (snap.activeTab === 'campuran') {
+ plainLines = [
+ `*Simulasi Muatan Campuran (V5.39)*`,
+ `Ruang Terpakai: ${snap.pct}`,
+ `Jumlah Unit: ${snap.units}`,
+ `Berat: ${snap.weight}`
+ ];
+ } else if (snap.activeTab === 'lori') {
+ plainLines = [
+ `*Cadangan Lori (V5.39)*`,
+ `Article: ${snap.art || '-'}`,
+ `Saiz: ${snap.size || '-'}`,
+ `Kuantiti: ${snap.qty || '-'} unit`,
+ `Cadangan: ${snap.rec || '-'}`
+ ];
+ } else {
+ plainLines = [`*Maklumat Katalog V5.39*`, `Sila salin maklumat terus dari jadual katalog.`];
+ }
+ lastAiDraftWaText = plainLines.join('\n');
+ const draftHtml = plainLines.map(l => esc(l)).join('<br>');
+ return `<strong>Draf Ringkas WhatsApp:</strong><br><div style="margin-top:4px;padding:7px;background:#f1f5f9;border-radius:7px;font-family:monospace;font-size:11px;">${draftHtml}</div><button type="button" class="btn-sm-card blue-tint" style="margin-top:6px;" onclick="copyLastAiDraftWa()">&#x1F4CB; Salin Draf Ini</button>`;
+ }
+
+ // Other local quick replies based on tab context
+ if (snap.activeTab === 'anggaran') {
+ if (q === 'overweight' || q.includes('berat')) {
+ if (!snap.gwUnit) return `Sila isi Anggaran GW / Unit di ruangan input.`;
+ const over = snap.estTotalKg > CONTAINER_WEIGHT_LIMIT_KG;
+ const diff = Math.abs(CONTAINER_WEIGHT_LIMIT_KG - snap.estTotalKg);
+ return over
+ ? `&#x26A0; Melebihi Had: ${snap.activePcs} x ${snap.gwUnit}kg = <strong>${snap.estTotalKg.toLocaleString()} kg</strong> (Lebih ${diff.toLocaleString()} kg daripada had 25,000kg).`
+ : `&#x2705; Selamat: ${snap.activePcs} x ${snap.gwUnit}kg = <strong>${snap.estTotalKg.toLocaleString()} kg</strong>.`;
+ }
+ return `Baki ruang: Panjang <strong>${snap.remL}</strong>, Lebar <strong>${snap.remW}</strong>, Tinggi <strong>${snap.remH}</strong>. Pastikan muatan disendal kemas.`;
+ } else if (snap.activeTab === 'gabungan' || snap.activeTab === 'campuran') {
+ return `<strong>Semakan Ruang & Berat:</strong> ${snap.activeTab === 'gabungan' ? 'Keperluan semasa 40HC adalah ' + snap.c40 : 'Ruang terpakai ' + snap.pct + ' dan berat ' + snap.weight}. Pastikan berat kasar gabungan tidak melebihi 25,000kg.`;
+ } else if (snap.activeTab === 'lori') {
+ return `<strong>Maklumat Lori:</strong> Cadangan lori berdasarkan sheet Article Out untuk ${snap.art || 'item ini'} ialah ${snap.rec || 'tidak dinyatakan'}. Semak semula panjang lori berbanding barang.`;
+ } else {
+ return `<strong>Katalog:</strong> Fungsi Carian Pintar Lokal hanya membaca senarai item. Untuk carian lanjut gunakan petak carian Katalog.`;
+ }
+}
+
+async function callGeminiQuickAsk(promptText) {
+ const apiKey = getSavedGeminiApiKey();
+ const modelName = getSavedGeminiModel();
+ const snap = getAppWideSnapshot();
+ let ctxData = '';
+ if (snap.activeTab === 'anggaran') ctxData = `Dimensi ${snap.L}x${snap.W}x${snap.H}m, GW/unit ${snap.gwUnit}kg, Kontena ${snap.contLabel}, 40'HC=${snap.pcs40}, 20'=${snap.pcs20}, Baki L=${snap.remL}, W=${snap.remW}, H=${snap.remH}`;
+ else if (snap.activeTab === 'gabungan') ctxData = `Tab Gabungan: Keperluan 40HC=${snap.c40}, 20=${snap.c20}, Detil=${snap.detail}`;
+ else if (snap.activeTab === 'campuran') ctxData = `Tab Campuran: Ruang terpakai=${snap.pct}, Total unit=${snap.units}, Berat=${snap.weight}`;
+ else if (snap.activeTab === 'lori') ctxData = `Tab Lori: Produk=${snap.art}, Qty=${snap.qty}, Cadangan lori=${snap.rec}`;
+ else ctxData = `Katalog sedang aktif.`;
+ 
+ // Sistem Automatik RAG - Carian Latar Belakang Gudang Pintar
+ const qLower = promptText.toLowerCase();
+ const tokens = qLower.split(/\s+/).filter(t => t.length > 2 && t !== 'guna' && t !== 'lori' && t !== 'apa' && t !== 'nak' && t !== 'untuk' && t !== 'roll' && t !== 'pcs' && !t.includes('kontena'));
+ let matchedData = "";
+ if (tokens.length > 0 && typeof articleOutRecords !== 'undefined' && typeof getAllCatalogRecords === 'function') {
+     const catDb = getAllCatalogRecords();
+     const matchAo = articleOutRecords.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
+     const matchCat = catDb.filter(r => tokens.some(t => String(r.code).toLowerCase().includes(t) || String(r.article).toLowerCase().includes(t))).slice(0, 4);
+     if (matchAo.length || matchCat.length) {
+         matchedData = "\n\n--- DATA RUJUKAN GUDANG PINTAR (Carian Automatik) ---\n";
+         if (matchAo.length) matchedData += "Kapasiti Lori (Dari Article Out): " + JSON.stringify(matchAo.map(r => ({produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_lori_unit: r.trucks}))) + "\n";
+         if (matchCat.length) matchedData += "Kapasiti Kontena (Dari Katalog): " + JSON.stringify(matchCat.map(r => ({produk: r.code, saiz: r.size, berat_seunit_kg: r.gw, max_20ft: r.c20, max_40hc: r.c40, susunan40: r.susunan40}))) + "\n";
+         matchedData += "Info Tambahan: Had muatan kontena (20'/40'HC) adalah 25,000kg. Had Lori: t1=1000kg, t3=3000kg, t5=5000kg, t10=10000kg, tr20(Lori 30')=15000kg, tr40(Treler 40')=24000kg. (Sentiasa pastikan berat didarab kuantiti tidak melebihi had kenderaan ini).";
+     }
+ }
+ 
+const systemPrompt = `Anda pembantu logistik pakar gudang Senawang. Jawab dalam Bahasa Melayu secara ringkas, tepat dan profesional. Konteks UI semasa (jika relevan): ${ctxData}.${matchedData}\n\nArahan PENTING: Jika pengguna bertanya tentang produk spesifik (contohnya PET400/50, GT1000 dll) tanpa merujuk Konteks UI, anda WAJIB kira dan rujuk menggunakan DATA RUJUKAN GUDANG PINTAR yang disertakan di atas. Jika data lori disertakan, rujuk kapasiti 'max_lori_unit' (contoh: t5 bermaksud lori 5 tan). ANDA JUGA WAJIB kira jumlah berat ('berat_seunit_kg' didarab dengan kuantiti) untuk pastikan ia tidak melebihi had muatan selamat (limit kg) kenderaan tersebut sebelum memberi cadangan. Jika berat berlebihan, cadangkan pecah trip atau lori/treler yang lebih besar (contoh tr20 atau tr40).`;
+ const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+ const resp = await fetchWithTimeout(url, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ contents: [{ role: 'user', parts: [{ text: `${systemPrompt}
+
+Soalan: ${promptText}` }] }]
+ })
+ }, 12000);
+ 
+if (!resp.ok) {
+ let errDetails = '';
+ try { const errData = await resp.json(); errDetails = errData.error ? errData.error.message : JSON.stringify(errData); } catch (e) {}
+ if (resp.status === 404) {
+  throw new Error(`Ralat 404: Model <strong>${esc(modelName)}</strong> tidak dijumpai. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em><br>Pastikan anda pilih model terkini <strong>gemini-3.5-flash-lite</strong>. (Model lama telah ditamatkan untuk pengguna baru oleh Google).`);
+ } else if (resp.status === 400) {
+  throw new Error(`Ralat 400: API Key tidak sah atau sambungan gagal. Sila periksa semula API Key anda. <br><em style="color:#b91c1c;">(Mesej API: ${esc(errDetails)})</em>`);
+ } else {
+  throw new Error(`HTTP ${resp.status}: ${esc(errDetails)}`);
+ }
+}
+ const data = await resp.json();
+ const reply = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]
+ ? data.candidates[0].content.parts[0].text
+ : '';
+ if (!reply) throw new Error('Tiada respons teks');
+ return esc(reply).replace(/\\n/g, '<br>');
+}
+async function runAiQuickPreset(presetKey) {
+ const labels = { overweight: 'Cek Had Berat', space: 'Baki & Susunan', wa: 'Draf Ringkas WA' };
+ appendAiChatBubble('user', labels[presetKey] || presetKey);
+ if (getSavedGeminiApiKey()) {
+ const loadingBubble = appendAiChatBubble('bot', '&#x23F3; <em>Menjana semakan Gemini AI...</em>');
+ try {
+ const gemHtml = await callGeminiQuickAsk(labels[presetKey] || presetKey);
+ if (loadingBubble) loadingBubble.innerHTML = gemHtml;
+ return;
+ } catch (e) {
+ if (loadingBubble) {
+ loadingBubble.innerHTML = buildLocalAiReply(presetKey) + `<div style="font-size:10.5px;color:#b45309;margin-top:4px;">(Fallback ke kiraan lokal: ${e.message})</div>`;
+ }
+ return;
+ }
+ }
+ appendAiChatBubble('bot', buildLocalAiReply(presetKey));
+}
+
+async function submitAiQuickQuestion() {
+ const inp = document.getElementById('aiQuickInput');
+ const q = inp ? inp.value.trim() : '';
+ if (!q) { showToast('Sila taip soalan dahulu.'); return; }
+ inp.value = '';
+ appendAiChatBubble('user', esc(q));
+ if (getSavedGeminiApiKey()) {
+ const loadingBubble = appendAiChatBubble('bot', '&#x23F3; <em>Menjana jawapan Gemini AI...</em>');
+ try {
+ const gemHtml = await callGeminiQuickAsk(q);
+ if (loadingBubble) loadingBubble.innerHTML = gemHtml;
+ return;
+ } catch (e) {
+ if (loadingBubble) {
+ loadingBubble.innerHTML = buildLocalAiReply(q) + `<div style="font-size:10.5px;color:#b45309;margin-top:4px;">(Fallback ke kiraan lokal: ${e.message})</div>`;
+ }
+ return;
+ }
+ }
+ appendAiChatBubble('bot', buildLocalAiReply(q));
 }
 
 window.addEventListener('DOMContentLoaded', () => {
