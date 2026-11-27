@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Logistics Toolbox V6.9 — Logistics Senawang</title>
+<title>Logistics Toolbox V6.14 — Logistics Senawang</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -1438,7 +1438,7 @@ body {
 <div class="top-header">
  <div class="header-row1" style="align-items:flex-start;">
  <div style="min-width:0;flex:1;">
- <h1 class="brand-title">&#x1F4E6; Logistics Toolbox <span class="v-badge">V6.9</span></h1>
+ <h1 class="brand-title">&#x1F4E6; Logistics Toolbox <span class="v-badge">V6.14</span></h1>
  <div class="header-sub">Logistics Senawang &bull; 40'HC (12.00&times;2.28&times;2.59m) &amp; 20' (6.00&times;2.28&times;2.28m)</div>
  </div>
  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
@@ -1924,7 +1924,7 @@ body {
  <li>Set <em>Execute as:</em> <strong>Me</strong> &amp; <em>Who has access:</em> <strong>Anyone</strong> &rarr; tekan <strong>Deploy</strong>.</li>
  <li>Salin <strong>Web app URL</strong> (<code>.../exec</code>) &amp; tampal dalam kotak di atas!</li>
  </ol>
- <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (Logistics Toolbox V6.9)</button>
+ <button type="button" class="btn-sm-card" style="margin-bottom:6px;width:100%;" onclick="copyAppsScriptCode()">&#x1F4CB; Salin Kod Google Apps Script (Logistics Toolbox V6.14)</button>
  <textarea id="appsScriptCodeArea" class="code-snippet-box" readonly onclick="this.select()">function doGet(e) {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
  var out = {};
@@ -2251,8 +2251,8 @@ const SEED_CATALOG = [
  { sheet: 'Woven (Internal)', article: 'PET400/100', code: 'PET400/100 (002)', size: '5.0m x 100m', width: 5.0, length: 100, gw: 443, c20: 30, c40: 54, susunan40: 'Tapak 6+6 Z', update: '-' },
  { sheet: 'Woven (Internal)', article: 'PET200/100', code: 'PET200/100 (001)', size: '5.0m x 100m', width: 5.0, length: 100, gw: 270, c20: 42, c40: 92, susunan40: 'Tapak 7+6', update: '-' },
  { sheet: 'Bentoliner (Internal)', article: 'BENTOLINER', code: 'ENM5000', size: '4.50m x 30.00m', width: 4.5, length: 30.0, mass: 5380, gw: 780, c20: 20, c40: 30, update: '-' },
- { sheet: 'SA (Internal)', article: 'Non Woven', code: 'TS10 00R', size: '4m x 300m', width: 4.0, length: 300, mass: 125, gw: 160, c20: 20, c40: 60, update: '-' },
- { sheet: 'SA (Internal)', article: 'Non Woven', code: 'TS20', size: '4m x 250m', width: 4.0, length: 250, mass: 125, gw: 135, c20: 20, c40: 60, update: '-' },
+ { sheet: 'SA (Internal)', category: 'Non Woven', article: 'TS10 00R', code: 'TS10 00R (Non Woven)', grade: 'TS10 00R', size: '4m x 300m', width: 4.0, length: 300, mass: 125, gw: 160, c20: 20, c40: 60, update: '-' },
+ { sheet: 'SA (Internal)', category: 'Non Woven', article: 'TS20', code: 'TS20 (Non Woven)', grade: 'TS20', size: '4m x 250m', width: 4.0, length: 250, mass: 125, gw: 135, c20: 20, c40: 60, update: '-' },
  { sheet: 'Upcoming SA', article: 'MIRAGRID GX', code: 'GX35/35 5.20x100', size: '5.20m x 100m', width: 5.20, length: 100, mass: 245, gw: 140, c20: 75, c40: 176, packing: '5.2-100-245', update: '20/11/2026' },
  { sheet: 'Upcoming SA', article: 'MIRAGRID GX', code: 'GX35/35 5.20x50', size: '5.20m x 50m', width: 5.20, length: 50, mass: 245, gw: 76, c20: 130, c40: 290, packing: '5.2-50-245', update: '20/11/2026' },
  { sheet: 'Upcoming SA', article: 'MIRAGRID GX', code: 'GX55/30 5.20m x 100m', size: '5.20m x 100m', width: 5.20, length: 100, mass: 255, gw: 145, c20: 70, c40: 150, packing: '5.2-100-255', update: '20/11/2026' },
@@ -2286,6 +2286,34 @@ const SEED_ARTICLE_OUT = [
  trucks: { t1: null, t3: null, t5: 15, t10: null, tr20: null, tr40: null },
  loadingTime: '17/11/2026',
  note: 'Single'
+ },
+ {
+ article: 'TS10 00R',
+ code: 'Non Woven • 125g/m²',
+ size: '4m x 300m',
+ gw: 160,
+ totalWeight: null,
+ trucks: { t1: null, t3: null, t5: 28, t10: null, tr20: null, tr40: null },
+ c20: 20,
+ c40: 60,
+ sourceTab: 'SA (Internal)',
+ isEstimate: true,
+ loadingTime: '-',
+ note: 'Estimate (SA (Internal))'
+ },
+ {
+ article: 'TS20',
+ code: 'Non Woven • 125g/m²',
+ size: '4m x 250m',
+ gw: 135,
+ totalWeight: null,
+ trucks: { t1: null, t3: null, t5: 33, t10: null, tr20: null, tr40: null },
+ c20: 20,
+ c40: 60,
+ sourceTab: 'SA (Internal)',
+ isEstimate: true,
+ loadingTime: '-',
+ note: 'Estimate (SA (Internal))'
  }
 ];
 
@@ -2808,11 +2836,17 @@ function parseSaSheet(rows) {
  const wid = num(r[offset + 4]), len = num(r[offset + 5]), size = str(r[offset + 6]);
  const gw = num(r[offset + 8]), c20 = num(r[offset + 9]), c40 = num(r[offset + 11]);
  const upd = dateCol !== -1 ? str(r[dateCol]) : str(r[offset + 14]);
- if (grade || size) {
+ if (grade || size || cat) {
+ const estLori5 = (gw && gw > 0) ? Math.max(1, Math.floor(4500 / gw)) : null;
+ const saTrucks = estLori5 ? { t5: estLori5 } : null;
+ const primaryGrade = grade || cat || 'Non Woven';
+ const subCode = cat ? `${primaryGrade} (${cat})` : primaryGrade;
  out.push({
  sheet: 'SA (Internal)',
- article: cat || 'Non Woven',
- code: grade,
+ category: cat || 'Non Woven',
+ article: primaryGrade,
+ code: subCode,
+ grade: primaryGrade,
  size: size || (wid && len ? `${wid}m x ${len}m` : ''),
  mass,
  width: wid,
@@ -2820,6 +2854,8 @@ function parseSaSheet(rows) {
  gw,
  c20,
  c40,
+ trucks: saTrucks,
+ isSaEstimate: Boolean(estLori5),
  update: upd || '-'
  });
  }
@@ -3155,6 +3191,30 @@ function getEffectiveContainerCap(r) {
  return { c20, c40, gw, source };
 }
 
+function mapSaCatalogToLoriRows(saItems) {
+ return (saItems || []).map(item => {
+ const catLabel = str(item.category || '');
+ const rawCode = str(item.grade || item.code || item.article || 'Non Woven');
+ const gradeName = rawCode.replace(/\s*\([^)]+\)\s*$/, '').trim() || rawCode;
+ const gwVal = num(item.gw) || 0;
+ const estLori5 = (gwVal > 0) ? Math.max(1, Math.floor(4500 / gwVal)) : null;
+ return {
+ article: gradeName,
+ code: catLabel ? `${catLabel}${item.mass ? ' • ' + item.mass + 'g/m²' : ''}` : gradeName,
+ size: str(item.size || ''),
+ gw: gwVal || null,
+ totalWeight: null,
+ trucks: item.trucks || (estLori5 ? { t5: estLori5 } : null),
+ c20: item.c20 || null,
+ c40: item.c40 || null,
+ sourceTab: 'SA (Internal)',
+ isEstimate: true,
+ loadingTime: item.update || '-',
+ note: 'Estimate (SA (Internal))'
+ };
+ });
+}
+
 function articleOutToCatalogItems(aoList) {
  return aoList.map(r => {
  const d = parseSizePair(r.size);
@@ -3217,6 +3277,9 @@ async function syncViaAppsScript() {
  newFab = newFab.concat(parsed.fab);
  newCat = newCat.concat(parsed.cat);
  if (parsed.ao) newAo = newAo.concat(parsed.ao);
+ if (s === 'SA (Internal)' && parsed.cat && parsed.cat.length > 0) {
+ newAo = newAo.concat(mapSaCatalogToLoriRows(parsed.cat));
+ }
  });
  return { newCat, newFab, newAo, okCount, method: 'Apps Script API' };
 }
@@ -3236,6 +3299,9 @@ function parseWorkbookBuffer(buf, methodLabel) {
  newFab = newFab.concat(parsed.fab);
  newCat = newCat.concat(parsed.cat);
  if (parsed.ao) newAo = newAo.concat(parsed.ao);
+ if (s === 'SA (Internal)' && parsed.cat && parsed.cat.length > 0) {
+ newAo = newAo.concat(mapSaCatalogToLoriRows(parsed.cat));
+ }
  });
  if (newCat.length === 0 && newAo.length === 0) {
  throw new Error('Fail XLSX dibaca tetapi 0 rekod produk ditemui');
@@ -3316,6 +3382,9 @@ async function syncViaPerSheetFallback() {
  newFab = newFab.concat(parsed.fab);
  newCat = newCat.concat(parsed.cat);
  if (parsed.ao) newAo = newAo.concat(parsed.ao);
+ if (s === 'SA (Internal)' && parsed.cat && parsed.cat.length > 0) {
+ newAo = newAo.concat(mapSaCatalogToLoriRows(parsed.cat));
+ }
  }
  });
  if (okCount > 0 && newCat.length > 0) {
@@ -3406,6 +3475,9 @@ function handleManualExcel(ev) {
  newFab = newFab.concat(parsed.fab);
  newCat = newCat.concat(parsed.cat);
  if (parsed.ao) newAo = newAo.concat(parsed.ao);
+ if (s === 'SA (Internal)' && parsed.cat && parsed.cat.length > 0) {
+ newAo = newAo.concat(mapSaCatalogToLoriRows(parsed.cat));
+ }
  });
  if (newCat.length > 0 || newAo.length > 0) {
  baseCatalogRecords = newCat;
@@ -3446,6 +3518,18 @@ function loadInitialData() {
  fabInternalRecords = f ? JSON.parse(f) : SEED_FAB_INTERNAL;
  customRecords = m ? JSON.parse(m) : [];
  articleOutRecords = ao ? JSON.parse(ao) : SEED_ARTICLE_OUT;
+ const saFromCat = (baseCatalogRecords || []).filter(r => r.sheet === 'SA (Internal)');
+ if (saFromCat.length > 0) {
+ const mappedSa = mapSaCatalogToLoriRows(saFromCat);
+ const existingKeys = new Set(articleOutRecords.map(x => `${String(x.article||'').toLowerCase()}|${String(x.code||'').toLowerCase()}|${String(x.size||'').toLowerCase()}`));
+ mappedSa.forEach(item => {
+ const k = `${String(item.article||'').toLowerCase()}|${String(item.code||'').toLowerCase()}|${String(item.size||'').toLowerCase()}`;
+ if (!existingKeys.has(k)) {
+ existingKeys.add(k);
+ articleOutRecords.push(item);
+ }
+ });
+ }
  } catch (e) {
  baseCatalogRecords = SEED_CATALOG;
  fabInternalRecords = SEED_FAB_INTERNAL;
@@ -3722,7 +3806,7 @@ function copyAnggaranWA() {
  const p20 = document.getElementById('res20Pcs').textContent.trim();
  const w20 = document.getElementById('res20Weight').textContent.trim();
  const lines = [
- `*Anggaran Muatan Kontena (Logistics Toolbox V6.9)*`,
+ `*Anggaran Muatan Kontena (Logistics Toolbox V6.14)*`,
  `Dimensi: ${L}m (L) x ${W}m (W) x ${H}m (H)`,
  `Container 40'HC: *${p40}* (Julat: ${r40})${w40 !== '-' ? ' | Berat: ' + w40 : ''}`,
  `Container 20': *${p20}*${w20 !== '-' ? ' | Berat: ' + w20 : ''}`
@@ -4076,7 +4160,7 @@ function copyGabunganWA() {
  const d20 = document.getElementById('gab20Detail').innerText.replace(/\n+/g, ' | ').trim();
 
  const lines = [
- `*Keperluan Kontena Gabungan (Logistics Toolbox V6.9)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.14)*`,
  ...(itemLines.length ? itemLines : ['• Tiada item dipilih']),
  `40'HC: *${c40}* (${d40})`,
  `20' Std: *${c20}* (${d20})`
@@ -4841,7 +4925,7 @@ function copyLoriItemWA(idx) {
  if (ec.c20) contParts.push(`Kontena - 20': ${ec.c20} unit`);
  if (ec.c40) contParts.push(`Kontena - 40'HC: ${ec.c40} unit`);
  const lines = [
- `*Rekod Lori & Kontena Article Out (Logistics Toolbox V6.9)*`,
+ `*Rekod Lori & Kontena Article Out (Logistics Toolbox V6.14)*`,
  `Article: *${r.article}* (${r.code})`,
  `Saiz: ${r.size || '-'}`,
  `Lori / Treler: ${usedTrucks.length ? usedTrucks.join(' | ') : 'Tiada rekod'}`
@@ -5057,7 +5141,7 @@ function closeBackupModal() {
 
 function buildBackupPayload() {
  return JSON.stringify({
- app: 'Logistics_Toolbox_V6_9',
+ app: 'Logistics_Toolbox_V6_14',
  exportedAt: new Date().toISOString(),
  customRecords: customRecords
  }, null, 2);
@@ -5404,21 +5488,21 @@ function buildLocalAiReply(modeOrQuestion) {
  ];
  } else if (snap.activeTab === 'gabungan') {
  plainLines = [
- `*Keperluan Kontena Gabungan (Logistics Toolbox V6.9)*`,
+ `*Keperluan Kontena Gabungan (Logistics Toolbox V6.14)*`,
  `Keperluan 40'HC: ${snap.c40}`,
  `Keperluan 20' Std: ${snap.c20}`,
  `Nota Tambahan: ${snap.detail}`
  ];
  } else if (snap.activeTab === 'campuran') {
  plainLines = [
- `*Simulasi Muatan Campuran (Logistics Toolbox V6.9)*`,
+ `*Simulasi Muatan Campuran (Logistics Toolbox V6.14)*`,
  `Ruang Terpakai: ${snap.pct}`,
  `Jumlah Unit: ${snap.units}`,
  `Berat: ${snap.weight}`
  ];
  } else if (snap.activeTab === 'lori') {
  plainLines = [
- `*Cadangan Lori (Logistics Toolbox V6.9)*`,
+ `*Cadangan Lori (Logistics Toolbox V6.14)*`,
  `Article: ${snap.art || '-'}`,
  `Saiz: ${snap.size || '-'}`,
  `Kuantiti: ${snap.qty || '-'} unit`,
